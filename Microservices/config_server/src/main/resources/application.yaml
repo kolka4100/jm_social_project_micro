@@ -1,0 +1,22 @@
+server:
+  port: 8088
+  servlet:
+    contextPath: /
+spring:
+  profiles:
+    active: dev, test
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://gitlab.com/Nikitos1997/jm_social_project.git
+          repos:
+            dev:
+              pattern: dev/*
+              uri: https://gitlab.com/Nikitos1997/jm_social_project/dev/{application}
+            prod:
+              pattern: prod/*
+              uri: https://gitlab.com/Nikitos1997/jm_social_project/prod/{application}
+            test:
+              pattern: test/*
+              uri: https://gitlab.com/Nikitos1997/jm_social_project/test/{application}
