@@ -13,10 +13,10 @@ spring:
           repos:
             dev:
               pattern: dev/*
-              uri: https://gitlab.com/Nikitos1997/jm_social_project_micro/Microservices/ms-config/dev/{application}
+              uri:
             prod:
               pattern: prod/*
-              uri: https://gitlab.com/Nikitos1997/jm_social_project_micro/Microservices/ms-config/prod/{application}
+              uri:
             test:
               pattern: test/*
-              uri: https://gitlab.com/Nikitos1997/jm_social_project_micro/Microservices/ms-config/test/{application}
+              uri:
