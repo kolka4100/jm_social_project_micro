@@ -9,14 +9,14 @@ spring:
     config:
       server:
         git:
-          uri: https://gitlab.com/Nikitos1997/jm_social_project.git
+          uri: https://gitlab.com/Nikitos1997/jm_social_project_micro.git
           repos:
             dev:
               pattern: dev/*
-              uri: https://gitlab.com/Nikitos1997/jm_social_project/dev/{application}
+              uri: https://gitlab.com/Nikitos1997/jm_social_project_micro/Microservices/ms-config/dev/{application}
             prod:
               pattern: prod/*
-              uri: https://gitlab.com/Nikitos1997/jm_social_project/prod/{application}
+              uri: https://gitlab.com/Nikitos1997/jm_social_project_micro/Microservices/ms-config/prod/{application}
             test:
               pattern: test/*
-              uri: https://gitlab.com/Nikitos1997/jm_social_project/test/{application}
+              uri: https://gitlab.com/Nikitos1997/jm_social_project_micro/Microservices/ms-config/test/{application}
