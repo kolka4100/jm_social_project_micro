@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "eureka.client.healthcheck.enabled",
+      "type": "java.lang.String",
+      "description": "Description for eureka.client.healthcheck.enabled."
+  }
+] }
