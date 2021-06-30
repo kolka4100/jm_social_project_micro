@@ -10,4 +10,6 @@ public class RequestWrapper {
     private AccountDto accountDto;
 
     private Profile profile;
+
+    private int lastDays;
 }

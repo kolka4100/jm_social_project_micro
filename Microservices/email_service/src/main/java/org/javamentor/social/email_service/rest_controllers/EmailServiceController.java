@@ -39,6 +39,14 @@ public class EmailServiceController {
                wrapper.getProfile().getFirstName(),
                wrapper.getProfile().getLastName());
    }
+
+   @PostMapping("/send-payment-notification")
+   public void sendPaymentNotification(@RequestBody RequestWrapper wrapper){
+       emailService.sendPaymentNotification(wrapper.getAccountDto().getEmail(),
+               wrapper.getLastDays(),
+               wrapper.getProfile().getFirstName(),
+               wrapper.getProfile().getLastName());
+   }
 }
 
 
