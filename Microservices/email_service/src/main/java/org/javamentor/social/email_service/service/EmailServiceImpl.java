@@ -1,5 +1,6 @@
 package org.javamentor.social.email_service.service;
 
+import org.javamentor.social.email_service.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
