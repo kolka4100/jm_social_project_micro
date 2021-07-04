@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: profile-service
+  data:
+    mongodb:
+      database: profiles
+      uri: mongodb://localhost:27017/profiles

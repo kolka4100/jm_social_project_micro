@@ -3,6 +3,8 @@ server:
   servlet:
     contextPath: /
 spring:
+  application:
+    name: config-server
   profiles:
     active: dev, test
   cloud:
