@@ -2,18 +2,20 @@ package jm_social_project.profile_service.controller;
 
 import jm_social_project.profile_service.model.Profile;
 import jm_social_project.profile_service.service.ProfileService;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/profiles")
 public class profileRestController {
     private ProfileService profileService;
+
+    @Autowired
+    public profileRestController(ProfileService profileService) {
+        this.profileService = profileService;
+    }
 
     @PostMapping
     public void createProfile(@RequestBody Profile profile) {
