@@ -2,28 +2,18 @@ package jm_social_project.profile_service.service;
 
 import jm_social_project.profile_service.model.Profile;
 import jm_social_project.profile_service.repository.ProfileRepository;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
+
+    @NonNull
     private ProfileRepository profileRepository;
-
-    public ProfileServiceImpl(ProfileRepository profileRepository) {
-        this.profileRepository = profileRepository;
-    }
-
-    public ProfileRepository getProfileRepository() {
-        return profileRepository;
-    }
-    @Autowired
-    public void setProfileRepository(ProfileRepository profileRepository) {
-        this.profileRepository = profileRepository;
-    }
 
     @Override
     public void saveProfile(Profile profile) {

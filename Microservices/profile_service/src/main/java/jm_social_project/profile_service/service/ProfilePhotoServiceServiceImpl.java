@@ -2,25 +2,18 @@ package jm_social_project.profile_service.service;
 
 import jm_social_project.profile_service.model.ProfilePhoto;
 import jm_social_project.profile_service.repository.ProfilePhotoRepository;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class ProfilePhotoServiceServiceImpl implements ProfilePhotoServiceService {
+
+    @NonNull
     private ProfilePhotoRepository photoRepository;
-
-    public ProfilePhotoRepository getPhotoRepository() {
-        return photoRepository;
-    }
-
-    @Autowired
-    public void setPhotoRepository(ProfilePhotoRepository photoRepository) {
-        this.photoRepository = photoRepository;
-    }
 
     @Override
     public void saveProfilePhoto(ProfilePhoto profilePhoto) {
