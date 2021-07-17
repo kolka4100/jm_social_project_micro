@@ -23,11 +23,11 @@ public class profileRestController {
     @PostMapping
     public void createProfile(@RequestBody Profile profile, @RequestHeader HttpHeaders httpHeaders) {
         String accountId = httpHeaders.getFirst("user_id");
-        profileService.saveProfile(profile,accountId);
+        profileService.saveProfile(profile, accountId);
     }
 
     @GetMapping("/accountId/{accountId}")
-    public Profile getProfileByAccountId(@PathVariable String accountId){
+    public Profile getProfileByAccountId(@PathVariable String accountId) {
         return profileService.getProfileByAccountId(accountId);
     }
 

@@ -12,8 +12,7 @@ import java.util.Date;
 
 @NoArgsConstructor
 @Data
-@Document (collection = "profile")
-//^^^^^^аннотация является монго-эквивалентом @Entity  в JPA.
+@Document(collection = "profile")
 public class Profile {
 
     @Id
