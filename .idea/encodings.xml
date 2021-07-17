@@ -3,5 +3,22 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/Microservices/config_server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Microservices/config_server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/email_service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/email_service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/eureke_server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/kafka-docker/consumer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/kafka-docker/consumer/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/kafka-docker/producer-consumer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/kafka-docker/producer-consumer/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/kafka-docker/producer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/kafka-docker/producer/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/login_server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/login_server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/media_storage/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/media_storage/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/profile_service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/profile_service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/spring-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Microservices/spring-gateway/src/main/resources" charset="UTF-8" />
   </component>
 </project>

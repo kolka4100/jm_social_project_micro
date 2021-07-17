@@ -4,9 +4,13 @@ import jm_social_project.profile_service.model.Profile;
 import jm_social_project.profile_service.service.ProfileService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,8 +21,14 @@ public class profileRestController {
     private ProfileService profileService;
 
     @PostMapping
-    public void createProfile(@RequestBody Profile profile) {
-        profileService.saveProfile(profile);
+    public void createProfile(@RequestBody Profile profile, @RequestHeader HttpHeaders httpHeaders) {
+        String accountId = httpHeaders.getFirst("user_id");
+        profileService.saveProfile(profile,accountId);
+    }
+
+    @GetMapping("/accountId/{accountId}")
+    public Profile getProfileByAccountId(@PathVariable String accountId){
+        return profileService.getProfileByAccountId(accountId);
     }
 
     @PutMapping

@@ -5,7 +5,8 @@ import jm_social_project.profile_service.model.Profile;
 import java.util.List;
 
 public interface ProfileService {
-    void saveProfile(Profile profile);
+
+    void saveProfile(Profile profile, String accountId);
 
     void updateProfile(Profile profile);
 
@@ -14,4 +15,6 @@ public interface ProfileService {
     List<Profile> getAllProfiles();
 
     Profile getProfileById(String id);
+
+    Profile getProfileByAccountId(String accountId);
 }
