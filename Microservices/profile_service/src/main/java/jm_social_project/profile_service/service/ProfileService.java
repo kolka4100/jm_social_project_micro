@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface ProfileService {
 
-    void saveProfile(Profile profile, String accountId);
+    Profile saveProfile(Profile profile, String accountId);
 
-    void updateProfile(Profile profile);
+    Profile updateProfile(Profile profile);
 
-    void deleteProfile(String id);
+    boolean deleteProfile(String id);
 
     List<Profile> getAllProfiles();
 

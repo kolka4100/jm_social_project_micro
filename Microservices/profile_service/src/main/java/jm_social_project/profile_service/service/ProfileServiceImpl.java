@@ -18,9 +18,9 @@ public class ProfileServiceImpl implements ProfileService {
     private ProfileRepository profileRepository;
 
     @Override
-    public void saveProfile(Profile profile, String accountId) {
+    public Profile saveProfile(Profile profile, String accountId) {
         profile.setAccountId(accountId);
-        profileRepository.insert(profile);
+        return profileRepository.insert(profile);
     }
 
     @Override
@@ -29,13 +29,14 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void updateProfile(Profile profile) {
-        profileRepository.save(profile);
+    public Profile updateProfile(Profile profile) {
+        return profileRepository.save(profile);
     }
 
     @Override
-    public void deleteProfile(String id) {
+    public boolean deleteProfile(String id) {
         profileRepository.deleteById(id);
+        return true;
     }
 
     @Override
