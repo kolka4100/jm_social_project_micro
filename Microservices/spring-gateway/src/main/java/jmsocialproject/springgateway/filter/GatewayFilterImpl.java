@@ -32,9 +32,11 @@ public class GatewayFilterImpl implements GatewayFilter {
         } else {
 
             var headers = exchange.getRequest().getHeaders();
+
+            // TODO изменить на авторизейшен как хочет лид (проверить наличие хедера авторизейшен)
             var jvtToken = headers.getFirst("JvtToken");
 
-            if (validator.validateToken(jvtToken)) {
+            if (jvtToken != null && validator.validateToken(jvtToken)) {
                 return chain.filter(exchange);
             }
 
