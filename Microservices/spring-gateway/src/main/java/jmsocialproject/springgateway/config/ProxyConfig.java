@@ -13,10 +13,10 @@ public class ProxyConfig {
     public RouteLocator routeLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("login-service_route",
-                        route -> route.path("/api/auth")
-                .and()
-                .method(HttpMethod.POST)
-                .uri("http://localhost:8000/api/auth"))
+                        route -> route.path("/api/rest/auth")
+                                .and()
+                                .method(HttpMethod.POST)
+                                .uri("http://localhost:8000/api/rest/auth"))
                 .build();
     }
 }
