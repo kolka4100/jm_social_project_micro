@@ -28,7 +28,9 @@ public class GatewayFilterImpl implements GatewayFilter {
         var originalUri = exchange.getAttributeOrDefault(GATEWAY_ORIGINAL_REQUEST_URL_ATTR, "Unknown");
 
         if (validator.isOpenApi(originalUri)) {
-            return chain.filter(exchange);
+            //TODO return All OK
+
+            return null;
         } else {
 
             var headers = exchange.getRequest().getHeaders();
@@ -37,10 +39,11 @@ public class GatewayFilterImpl implements GatewayFilter {
             var jvtToken = headers.getFirst("JvtToken");
 
             if (jvtToken != null && validator.validateToken(jvtToken)) {
-                return chain.filter(exchange);
+                //TODO return All OK
+                return null;
             }
 
-
+            //TODO return Bad Token
             return null;
         }
     }
