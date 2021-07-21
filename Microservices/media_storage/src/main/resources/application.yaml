@@ -5,3 +5,8 @@ mediastorage:
   path: ./../media_storage/
   video: videos/
   photo: photos/
+
+spring:
+  redis:
+    host: localhost
+    port: 6379

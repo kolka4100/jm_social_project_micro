@@ -2,6 +2,8 @@ package jm_social_project.media_storage.service;
 
 
 import jm_social_project.media_storage.exception.StorageException;
+import jm_social_project.media_storage.model.Account;
+import jm_social_project.media_storage.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -29,6 +31,9 @@ public class StorageServiceImpl implements StorageService {
 
     @Autowired
     private ProfilePhotoService profilePhotoService;
+
+    @Autowired
+    AccountRepository accountRepository;
 
 
     public void store(MultipartFile file, Long id) {
@@ -64,6 +69,8 @@ public class StorageServiceImpl implements StorageService {
         } catch (IOException e) {
             throw new StorageException("Failed to store video.", e);
         }
+
+        accountRepository.save(id, destinationFile);
 
     }
 
@@ -103,6 +110,8 @@ public class StorageServiceImpl implements StorageService {
         }
 
         profilePhotoService.add(photo);
+
+        accountRepository.save(id, destinationFile);
 
     }
 
