@@ -7,6 +7,11 @@ mediastorage:
   photo: photos/
 
 spring:
+  application:
+    name: media-storage
   redis:
     host: localhost
     port: 6379
+  sleuth:
+    sampler:
+      probability: 1.0
