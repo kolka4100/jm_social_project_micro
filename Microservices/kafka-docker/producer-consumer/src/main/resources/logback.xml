@@ -12,7 +12,7 @@
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <FileNamePattern>log/log_%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>Microservices/kafka-docer/producer-consumer/target/logs/log_%d{yyyy-MM-dd}.log</FileNamePattern>
 
             <!-- Храним файлы логов 30 дней -->
             <maxHistory>30</maxHistory>
@@ -22,7 +22,7 @@
 
         </rollingPolicy>
         <encoder>
-            <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} [kafka-docker.producer-consumer] [%thread] [%-5level] [%logger:%line] - %msg%n</pattern>
+            <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} [%thread] [%-5level] [%logger:%line] - %msg%n</pattern>
         </encoder>
     </appender>
 
