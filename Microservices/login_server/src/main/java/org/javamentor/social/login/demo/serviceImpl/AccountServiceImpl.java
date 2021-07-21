@@ -58,7 +58,7 @@ public class AccountServiceImpl implements AccountService {
     public AuthorizeDto getAuthorizeDto(AuthRequest request) {
         Account account = findByEmailAndPassword(request.getEmail(), request.getPassword());
         if (account.getEnable()) {
-            String token = jwtTokenProvider.generateToken(account.getEmail(), account.getRole());
+            String token = jwtTokenProvider.generateToken(account.getEmail(), account.getRole(), account.getId());
             return new AuthorizeDto(token, account);
         } else {
             throw new BlockUserException("user blocked");
