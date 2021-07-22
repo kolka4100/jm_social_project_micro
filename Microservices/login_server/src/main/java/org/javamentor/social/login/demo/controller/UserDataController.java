@@ -21,9 +21,9 @@ public class UserDataController{
 
     @PostMapping("/email")
     public String getEmail(@RequestBody Long userId) {
-        Account acc = accountService.findById(userId);
-        if (acc != null) {
-            return acc.getEmail();
+        String email = accountService.getUserEmailByUserId(userId);
+        if (email != null) {
+            return email;
 
         } else {
             throw new NoSuchUserException("No account with id " + userId);

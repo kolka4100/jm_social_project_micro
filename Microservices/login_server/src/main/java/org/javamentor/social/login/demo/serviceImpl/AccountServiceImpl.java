@@ -8,11 +8,11 @@ import org.javamentor.social.login.demo.model.Account;
 import org.javamentor.social.login.demo.model.dto.AuthorizeDto;
 import org.javamentor.social.login.demo.model.request.AuthRequest;
 import org.javamentor.social.login.demo.service.AccountService;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -77,5 +77,11 @@ public class AccountServiceImpl implements AccountService {
     public Account findById(final Long userId) {
         final Optional<Account> accountOptional = accountDao.findById(userId);
         return accountOptional.orElse(null);
+    }
+
+    @Override
+    public String getUserEmailByUserId(final Long userId) {
+        Optional<Account> accountOptional = accountDao.findById(userId);
+        return accountOptional.map(Account::getEmail).orElse(null);
     }
 }

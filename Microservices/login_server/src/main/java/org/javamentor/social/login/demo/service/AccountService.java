@@ -19,4 +19,6 @@ public interface AccountService{
     AuthorizeDto getAuthorizeDto(AuthRequest request);
 
     Account findById(Long userId);
+
+    String getUserEmailByUserId(Long userId);
 }
