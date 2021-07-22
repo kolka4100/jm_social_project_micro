@@ -8,8 +8,11 @@ import org.javamentor.social.login.demo.model.Account;
 import org.javamentor.social.login.demo.model.dto.AuthorizeDto;
 import org.javamentor.social.login.demo.model.request.AuthRequest;
 import org.javamentor.social.login.demo.service.AccountService;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -68,5 +71,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void save(Account account) {
         accountDao.saveAndFlush(account);
+    }
+
+    @Override
+    public Account findById(final Long userId) {
+        final Optional<Account> accountOptional = accountDao.findById(userId);
+        return accountOptional.orElse(null);
     }
 }

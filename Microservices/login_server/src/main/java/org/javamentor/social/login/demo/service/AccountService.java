@@ -17,4 +17,6 @@ public interface AccountService{
     void register(AuthRequest authRequest);
 
     AuthorizeDto getAuthorizeDto(AuthRequest request);
+
+    Account findById(Long userId);
 }
