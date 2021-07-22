@@ -1,6 +1,9 @@
 package jm_social_project.media_storage.service;
 
 
+import jm_social_project.media_storage.exception.StorageException;
+import jm_social_project.media_storage.model.Account;
+import jm_social_project.media_storage.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -29,8 +32,11 @@ public class StorageServiceImpl implements StorageService {
     @Autowired
     private ProfilePhotoService profilePhotoService;
 
+    @Autowired
+    AccountRepository accountRepository;
 
-    public void store(MultipartFile file, Principal principal) {
+
+    public void store(MultipartFile file, Long id) {
 
         String contentType = file.getContentType();
 
@@ -39,18 +45,19 @@ public class StorageServiceImpl implements StorageService {
         }
 
         if (contentType.startsWith("video")) {
-            storeVideo(file, principal);
+            storeVideo(file, id);
 
         } else if (contentType.startsWith("image")) {
-            storePhoto(file, principal);
+            storePhoto(file, id);
 
         }
 
     }
 
     private void storeVideo(MultipartFile file,
-                            Principal principal) throws StorageException {
-        Path rootLocation = Path.of(URI + env.getProperty("mediastorage.video") + principal.getName());
+                            Long id) throws StorageException {
+
+        Path rootLocation = Path.of(URI + env.getProperty("mediastorage.video") + id);
 
         Path destinationFile = rootLocation
                 .resolve(Paths.get(file.getOriginalFilename()));
@@ -63,25 +70,29 @@ public class StorageServiceImpl implements StorageService {
             throw new StorageException("Failed to store video.", e);
         }
 
+        accountRepository.save(id, destinationFile);
+
     }
 
     private void storePhoto(MultipartFile file,
-                            Principal principal) throws StorageException {
+                            Long id) throws StorageException {
 
         String NamePattern = "photo-%d-%d.%s";
-        Path rootLocation = Path.of(URI + env.getProperty("mediastorage.photo") + principal.getName());
+
+
+        Path rootLocation = Path.of(URI + env.getProperty("mediastorage.photo") + id);
 
         Account account = accountService.findByUserEmail(principal.getName());
 
         int photoNumber = profilePhotoService
                 .findAllByProfileId(account.getProfile()).size() + 1;
 
-        long profileId = account.getProfile().getId();
+//        long profileId = account.getProfile().getId();
 
         String fileExtension = file.getOriginalFilename()
                 .substring(file.getOriginalFilename().lastIndexOf(".") + 1);
 
-        String fileName = String.format(NamePattern, profileId,
+        String fileName = String.format(NamePattern, id,
                 photoNumber, fileExtension);
 
         Path destinationFile = rootLocation.resolve(Paths.get(fileName));
@@ -99,6 +110,8 @@ public class StorageServiceImpl implements StorageService {
         }
 
         profilePhotoService.add(photo);
+
+        accountRepository.save(id, destinationFile);
 
     }
 

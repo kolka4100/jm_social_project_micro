@@ -5,7 +5,7 @@ import java.security.Principal;
 
 public interface StorageService {
 
-    void store(MultipartFile file, Principal principal);
+    void store(MultipartFile file, Long id);
 
 
 
