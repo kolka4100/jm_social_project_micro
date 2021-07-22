@@ -38,7 +38,7 @@ public class EmailServiceController {
 //                         @RequestHeader Map<String, String> headers) {
                          @RequestHeader("user_id") String userId){
        try {
-           emailService.sendEmail(loginService.register(Long.parseLong(userId)), mailDto.getSubject(), mailDto.getText());
+           emailService.sendEmail(loginService.getEmailByAccountId(Long.parseLong(userId)), mailDto.getSubject(), mailDto.getText());
        } catch (NumberFormatException nfe) {  // TODO: протестировать
            LOGGER.error("Не удалось извлечь user_id", nfe);
        }

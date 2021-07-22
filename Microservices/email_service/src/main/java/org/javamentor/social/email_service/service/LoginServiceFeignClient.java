@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface LoginServiceFeignClient {
 
     @PostMapping("/api/rest/data/email")
-    String register(@RequestBody Long userId);
+    String getEmailByAccountId(@RequestBody Long userId);
 }
