@@ -1,10 +1,7 @@
 package jmsocialproject.springgateway.filter;
 
-import io.jsonwebtoken.*;
 import jmsocialproject.springgateway.validator.RouteValidation;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.stereotype.Component;
@@ -12,6 +9,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Component
 public class GatewayFilterImpl implements GatewayFilter {
@@ -20,32 +18,33 @@ public class GatewayFilterImpl implements GatewayFilter {
     RouteValidation validator;
 
 
-
-
     @Override
     public Mono<Void> filter(final ServerWebExchange exchange, final GatewayFilterChain chain) {
 
         var originalUri = exchange.getAttributeOrDefault(GATEWAY_ORIGINAL_REQUEST_URL_ATTR, "Unknown");
 
         if (validator.isOpenApi(originalUri)) {
-            //TODO return All OK
 
-            return null;
+            return chain.filter(exchange);
         } else {
 
             var headers = exchange.getRequest().getHeaders();
 
-            // TODO изменить на авторизейшен как хочет лид (проверить наличие хедера авторизейшен)
-            var jvtToken = headers.getFirst("JvtToken");
+            var jvtToken = headers.getFirst("authorization");
 
             if (jvtToken != null && validator.validateToken(jvtToken)) {
-                //TODO return All OK
-                return null;
+                return chain.filter(exchange);
             }
 
-            //TODO return Bad Token
-            return null;
+            return this.onErrorFilter(exchange);
         }
+    }
+
+    Mono<Void> onErrorFilter(ServerWebExchange exchange) {
+        var response = exchange.getResponse();
+        response.setStatusCode(BAD_REQUEST);
+        return response.setComplete();
+
     }
 
 
