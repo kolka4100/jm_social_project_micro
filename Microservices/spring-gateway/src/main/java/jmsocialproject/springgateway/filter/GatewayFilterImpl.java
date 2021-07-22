@@ -23,10 +23,7 @@ public class GatewayFilterImpl implements GatewayFilter {
 
         var originalUri = exchange.getAttributeOrDefault(GATEWAY_ORIGINAL_REQUEST_URL_ATTR, "Unknown");
 
-        if (validator.isOpenApi(originalUri)) {
-
-            return chain.filter(exchange);
-        } else {
+        if (!validator.isOpenApi(originalUri)) {
 
             var headers = exchange.getRequest().getHeaders();
 
@@ -38,6 +35,9 @@ public class GatewayFilterImpl implements GatewayFilter {
 
             return this.onErrorFilter(exchange);
         }
+
+        return chain.filter(exchange);
+
     }
 
     Mono<Void> onErrorFilter(ServerWebExchange exchange) {
