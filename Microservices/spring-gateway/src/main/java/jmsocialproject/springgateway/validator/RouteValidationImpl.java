@@ -5,18 +5,23 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @Log
 public class RouteValidationImpl implements RouteValidation {
 
-    List<String> openApi;
+    private final List<String> openApi;
 
-    private String jwtSecret;
+    private final String jwtSecret;
 
-    public RouteValidationImpl(@Value("#{'${openApi.list}'.split(',')}") final List<String> openApi,     @Value("${jwt.secret}") final String jwtSecret) {
-        this.openApi = openApi;
+    public RouteValidationImpl( @Value("${jwt.secret}") final String jwtSecret) {
+        this.openApi = new ArrayList<>();
+        openApi.add("/api/rest/auth/login");
+        openApi.add("/api/rest/auth/registration");
+
+
         this.jwtSecret = jwtSecret;
     }
 
