@@ -11,6 +11,9 @@ import org.javamentor.social.login.demo.service.AccountService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -58,7 +61,7 @@ public class AccountServiceImpl implements AccountService {
     public AuthorizeDto getAuthorizeDto(AuthRequest request) {
         Account account = findByEmailAndPassword(request.getEmail(), request.getPassword());
         if (account.getEnable()) {
-            String token = jwtTokenProvider.generateToken(account.getEmail(), account.getRole());
+            String token = jwtTokenProvider.generateToken(account.getEmail(), account.getRole(), account.getId());
             return new AuthorizeDto(token, account);
         } else {
             throw new BlockUserException("user blocked");
@@ -68,5 +71,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void save(Account account) {
         accountDao.saveAndFlush(account);
+    }
+
+    @Override
+    public Account findById(final Long userId) {
+        final Optional<Account> accountOptional = accountDao.findById(userId);
+        return accountOptional.orElse(null);
+    }
+
+    @Override
+    public String getUserEmailByUserId(final Long userId) {
+        Optional<Account> accountOptional = accountDao.findById(userId);
+        return accountOptional.map(Account::getEmail).orElse(null);
     }
 }

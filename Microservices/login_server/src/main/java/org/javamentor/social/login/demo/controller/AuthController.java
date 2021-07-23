@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/rest/auth")
 public class AuthController implements Client{
 
     private final AccountService accountService;
@@ -18,14 +18,14 @@ public class AuthController implements Client{
     }
 
 
-    @PostMapping("/auth")
+    @PostMapping("/login")
     @ApiOperation(value = "Authenticate users",
             notes = "Provide an email and password for authentication")
     public AuthorizeDto auth(@RequestBody AuthRequest request) {
         return accountService.getAuthorizeDto(request);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/registration")
     public void register(@RequestBody AuthRequest request) {
         accountService.register(request);
     }

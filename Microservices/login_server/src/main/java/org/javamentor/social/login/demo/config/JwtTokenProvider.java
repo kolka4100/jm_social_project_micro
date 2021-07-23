@@ -20,10 +20,11 @@ public class JwtTokenProvider {
     @Value("${jwt.expirationTime}")
     private int expirationTime;
 
-    public String generateToken(String email, Role role) {
+    public String generateToken(String email, Role role, Long userId) {
 
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("role", role.getRoleName());
+        claims.put("id", userId);
 
         Date date = Date.from(LocalDate.now().plusDays(expirationTime).atStartOfDay(ZoneId.systemDefault()).toInstant());
 
