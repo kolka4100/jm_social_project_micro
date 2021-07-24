@@ -5,3 +5,6 @@ spring:
     mongodb:
       database: profiles
       uri: mongodb://localhost:27017/profiles
+  sleuth:
+    sampler:
+      probability: 1.0
