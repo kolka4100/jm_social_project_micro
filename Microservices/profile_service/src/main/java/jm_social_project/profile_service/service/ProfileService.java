@@ -5,13 +5,16 @@ import jm_social_project.profile_service.model.Profile;
 import java.util.List;
 
 public interface ProfileService {
-    void saveProfile(Profile profile);
 
-    void updateProfile(Profile profile);
+    Profile saveProfile(Profile profile, String accountId);
 
-    void deleteProfile(String id);
+    Profile updateProfile(Profile profile);
+
+    boolean deleteProfile(String id);
 
     List<Profile> getAllProfiles();
 
     Profile getProfileById(String id);
+
+    Profile getProfileByAccountId(String accountId);
 }

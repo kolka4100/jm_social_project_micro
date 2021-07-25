@@ -6,7 +6,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -16,18 +18,25 @@ public class ProfileServiceImpl implements ProfileService {
     private ProfileRepository profileRepository;
 
     @Override
-    public void saveProfile(Profile profile) {
-        profileRepository.insert(profile);
+    public Profile saveProfile(Profile profile, String accountId) {
+        profile.setAccountId(accountId);
+        return profileRepository.insert(profile);
     }
 
     @Override
-    public void updateProfile(Profile profile) {
-        profileRepository.save(profile);
+    public Profile getProfileByAccountId(String accountId) {
+        return profileRepository.getProfileByAccountId(accountId);
     }
 
     @Override
-    public void deleteProfile(String id) {
+    public Profile updateProfile(Profile profile) {
+        return profileRepository.save(profile);
+    }
+
+    @Override
+    public boolean deleteProfile(String id) {
         profileRepository.deleteById(id);
+        return true;
     }
 
     @Override
@@ -39,4 +48,6 @@ public class ProfileServiceImpl implements ProfileService {
     public Profile getProfileById(String id) {
         return profileRepository.findById(id).orElse(null);
     }
+
+
 }

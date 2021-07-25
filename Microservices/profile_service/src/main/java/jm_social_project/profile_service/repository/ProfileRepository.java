@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @EnableMongoRepositories
 @Repository
 public interface ProfileRepository extends MongoRepository<Profile, String> {
+
+    Profile getProfileByAccountId(String accountId);
 }
