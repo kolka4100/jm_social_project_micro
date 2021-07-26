@@ -4,14 +4,25 @@ import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 import org.javamentor.social.payments_service.model.OrderDetail;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Component
 public class PaymentService {
-    private static final String CLIENT_ID = "AYX9mJH3Dogx-S4wvqC8IN-wh-jCNcAxCf9cuqrNaBfg4J44aa8ijMxGk0nDIRvsXOsDYZNuhUyPLqLN";
-    private static final String CLIENT_SECRET = "EE0Hh-oPqf5szggjqqAliZCZ-HNaNRPzP0agG2P1yguMibl43yG8Xh5EVsJMbwl6LfaczOtQBAQlE0oG";
-    private static final String MODE = "sandbox";
+    @Value("${spring.payment.service.clientId}")
+    private String clientId;
+    @Value("${spring.payment.service.clientSecret}")
+    private String clientSecret;
+    @Value("${spring.payment.service.mode}")
+    private String mode;
+    @Value("${spring.payment.service.cancelUrl}")
+    private String cancelUrl;
+    @Value("${spring.payment.service.returnUrl}")
+    private String returnUrl;
+
+
 
     public String authorizePayment(OrderDetail orderDetail) throws PayPalRESTException {
         Payer payer = getPayerInformation();
@@ -23,12 +34,9 @@ public class PaymentService {
                 .setRedirectUrls(redirectUrls)
                 .setPayer(payer)
                 .setIntent("authorize");
-
-
-        APIContext apiContext = new APIContext(CLIENT_ID, CLIENT_SECRET, MODE);
+        APIContext apiContext = new APIContext(clientId, clientSecret, mode);
         Payment approvedPayment = requestPayment.create(apiContext);
 
-        System.out.println(approvedPayment);
         return getApprovalLink(approvedPayment);
     }
 
@@ -46,25 +54,19 @@ public class PaymentService {
 
     private RedirectUrls getRedirectURLs() {
         RedirectUrls redirectUrls = new RedirectUrls();
-
-        //Here must be URL of Cancel to pay
-        redirectUrls.setCancelUrl("http://localhost:8061/pay/cancel");
-        //Here must be URL of review to pay
-        redirectUrls.setReturnUrl("http://localhost:8061/pay/return");
-
+        redirectUrls.setCancelUrl(cancelUrl);
+        redirectUrls.setReturnUrl(returnUrl);
         return redirectUrls;
     }
 
     private Payer getPayerInformation() {
         Payer payer = new Payer();
         payer.setPaymentMethod("paypal");
-
         PayerInfo payerInfo = new PayerInfo();
         payerInfo.setFirstName("Александр")
                 .setLastName("Достоевский")
                 .setEmail("sb-lxwlr6879427@personal.example.com");
         payer.setPayerInfo(payerInfo);
-
         return payer;
     }
 
