@@ -2,6 +2,7 @@ package org.javamentor.social.friend_service.service;
 
 import org.javamentor.social.friend_service.dao.FriendRelationshipRepository;
 import org.javamentor.social.friend_service.exceptions.RelationshipAlreadyExistException;
+import org.javamentor.social.friend_service.exceptions.RelationshipDontExistException;
 import org.javamentor.social.friend_service.model.FriendRelationship;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,21 @@ public class FriendRelationshipService implements IFriendRelationshipService {
 
     @Override
     public void delete(final long relationshipId) {
+
         friendRelationshipRepository.deleteById(relationshipId);
     }
+
+    @Override
+    public void delete(final long firstUserId, final long secondUserId) throws RelationshipDontExistException{
+        Long relationshipId = findRelationshipIdByUsersIdsIfExists(firstUserId, secondUserId);
+
+        if (relationshipId != null) {
+            delete(relationshipId);
+        }
+
+        throw new RelationshipDontExistException("Relationship between user with Id " + firstUserId +
+                " and user with Id " + secondUserId + " dont exists");
+    }
+
 
 }

@@ -13,4 +13,6 @@ public interface IFriendRelationshipService {
     Long findRelationshipIdByUsersIdsIfExists(long firstUserId, long secondUserId);
 
     void delete(long relationshipId);
+
+    void delete(long firstUserId, long secondUserId);
 }
