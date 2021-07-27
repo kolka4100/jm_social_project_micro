@@ -18,7 +18,7 @@ public class FriendsService implements IFriendsService {
     public Friends save(final Friends friends) {
         var invitingUserId = friends.getInvitingUserId();
         var invitedUserId = friends.getInvitedUserId();
-        if (findRelationshipByUsersIdsIfExists(invitingUserId, invitedUserId) == null) {
+        if (findFriendsByUsersIdsIfExists(invitingUserId, invitedUserId) == null) {
             return friendsRepository.saveAndFlush(friends);
         }
         throw new RelationshipAlreadyExistException("Relationship between user with Id " + invitingUserId +
@@ -26,7 +26,7 @@ public class FriendsService implements IFriendsService {
     }
 
     @Override
-    public Friends findRelationshipByUsersIdsIfExists(final long firstUserId, final long secondUserId) {
+    public Friends findFriendsByUsersIdsIfExists(final long firstUserId, final long secondUserId) {
         var relationship = friendsRepository.findByInvitingUserIdAndInvitedUserId(firstUserId, secondUserId);
 
         if (relationship == null) {
@@ -37,7 +37,7 @@ public class FriendsService implements IFriendsService {
 
     @Override
     public Long findFriendsIdByUsersIdsIfExists(final long firstUserId, final long secondUserId) {
-        var relationship = findRelationshipByUsersIdsIfExists(firstUserId, secondUserId);
+        var relationship = findFriendsByUsersIdsIfExists(firstUserId, secondUserId);
         if (relationship != null) {
             return relationship.getId();
 

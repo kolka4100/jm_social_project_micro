@@ -8,7 +8,7 @@ public interface IFriendsService {
 
     Friends save(Friends relationship);
 
-    Friends findRelationshipByUsersIdsIfExists(long firstUserId, long secondUserId);
+    Friends findFriendsByUsersIdsIfExists(long firstUserId, long secondUserId);
 
     Long findFriendsIdByUsersIdsIfExists(long firstUserId, long secondUserId);
 
