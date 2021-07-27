@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "friend_relationship", schema = "public")
+@Table(name = "friends", schema = "public")
 public class Friends {
 
     @NonNull

@@ -15,11 +15,12 @@ public class FriendsService implements IFriendsService {
 
 
     @Override
-    public Friends save(final Friends friends) {
+    public void save(final Friends friends) {
         var invitingUserId = friends.getInvitingUserId();
         var invitedUserId = friends.getInvitedUserId();
         if (findFriendsByUsersIdsIfExists(invitingUserId, invitedUserId) == null) {
-            return friendsRepository.saveAndFlush(friends);
+            friendsRepository.saveNative(friends);
+            return;
         }
         throw new RelationshipAlreadyExistException("Relationship between user with Id " + invitingUserId +
                 " and user with Id " + invitedUserId + " already exists");

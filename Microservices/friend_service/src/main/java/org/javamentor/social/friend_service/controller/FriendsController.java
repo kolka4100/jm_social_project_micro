@@ -17,11 +17,11 @@ public class FriendsController {
     private IFriendsService friendRelationshipService;
 
     @PostMapping("/save")
-    public Friends saveRelationship(@RequestBody Long invitingUserId, @RequestBody Long invitedUserId) {
+    public void saveRelationship(@RequestBody Long invitingUserId, @RequestBody Long invitedUserId) {
 
         var friendRelationship = new Friends(invitingUserId, invitedUserId);
 
-        return friendRelationshipService.save(friendRelationship);
+        friendRelationshipService.save(friendRelationship);
     }
 
     @PostMapping("/delete")

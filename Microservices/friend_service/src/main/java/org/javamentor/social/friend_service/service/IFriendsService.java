@@ -6,7 +6,7 @@ import org.javamentor.social.friend_service.model.Friends;
 public interface IFriendsService {
 
 
-    Friends save(Friends relationship);
+    void save(Friends relationship);
 
     Friends findFriendsByUsersIdsIfExists(long firstUserId, long secondUserId);
 
