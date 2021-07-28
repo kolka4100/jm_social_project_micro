@@ -15,7 +15,7 @@ public interface FriendsRepository extends JpaRepository<Friends, Long> {
     @Modifying
     @Transactional
     @Query(value = "insert into friends (inviting_user_id, invited_user_id, relationship_status) "
-            + "VALUES (:#{#s.getInvitingUserId()},:#{#s.getInvitedUserId()},  :#{#s.getRelationship()})", nativeQuery = true)
+            + "VALUES (:#{#s.getInvitingUserId()},:#{#s.getInvitedUserId()},  :#{#s.getStatus()})", nativeQuery = true)
     <S extends Friends> void saveNative(@Param("s") S s);
 
 }

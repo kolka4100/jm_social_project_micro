@@ -27,19 +27,19 @@ public class Friends {
     private Long invitedUserId;
 
     @Column(name = "relationship_status")
-    private String relationship;
+    private String status;
 
     public Friends(@NonNull Long invitingUserId,
-                   @NonNull Long invitedUserId, String relationship) {
+                   @NonNull Long invitedUserId, String status) {
         this.invitingUserId = invitingUserId;
         this.invitedUserId = invitedUserId;
-        this.relationship = relationship;
+        this.status = status;
     }
 
     public Friends(@NonNull Long invitingUserId,
                    @NonNull Long invitedUserId) {
         this.invitingUserId = invitingUserId;
         this.invitedUserId = invitedUserId;
-        this.relationship = Relationship.WAIT.toString();
+        this.status = Relationship.WAIT.toString();
     }
 }

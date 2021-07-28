@@ -4,8 +4,11 @@ import org.javamentor.social.friend_service.dao.FriendsRepository;
 import org.javamentor.social.friend_service.exceptions.RelationshipAlreadyExistException;
 import org.javamentor.social.friend_service.exceptions.RelationshipDontExistException;
 import org.javamentor.social.friend_service.model.Friends;
+import org.javamentor.social.friend_service.model.Relationship;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class FriendsService implements IFriendsService {
@@ -18,8 +21,9 @@ public class FriendsService implements IFriendsService {
     public void save(final Friends friends) {
         var invitingUserId = friends.getInvitingUserId();
         var invitedUserId = friends.getInvitedUserId();
-        if (findFriendsByUsersIdsIfExists(invitingUserId, invitedUserId) == null) {
+        if (findFriendsByUsersIds(invitingUserId, invitedUserId) == null) {
             friendsRepository.saveNative(friends);
+            friends.setId(findFriendsIdByUsersIds(invitingUserId, invitedUserId));
             return;
         }
         throw new RelationshipAlreadyExistException("Relationship between user with Id " + invitingUserId +
@@ -27,7 +31,7 @@ public class FriendsService implements IFriendsService {
     }
 
     @Override
-    public Friends findFriendsByUsersIdsIfExists(final long firstUserId, final long secondUserId) {
+    public Friends findFriendsByUsersIds(final long firstUserId, final long secondUserId) {
         var relationship = friendsRepository.findByInvitingUserIdAndInvitedUserId(firstUserId, secondUserId);
 
         if (relationship == null) {
@@ -37,12 +41,13 @@ public class FriendsService implements IFriendsService {
     }
 
     @Override
-    public Long findFriendsIdByUsersIdsIfExists(final long firstUserId, final long secondUserId) {
-        var relationship = findFriendsByUsersIdsIfExists(firstUserId, secondUserId);
+    public Long findFriendsIdByUsersIds(final long firstUserId, final long secondUserId) {
+        var relationship = findFriendsByUsersIds(firstUserId, secondUserId);
+
         if (relationship != null) {
             return relationship.getId();
-
         }
+
         return null;
     }
 
@@ -54,15 +59,28 @@ public class FriendsService implements IFriendsService {
 
     @Override
     public void deleteByUsersIds(final long firstUserId, final long secondUserId) {
-        Long friendsId = findFriendsIdByUsersIdsIfExists(firstUserId, secondUserId);
+        Long friendsId = findFriendsIdByUsersIds(firstUserId, secondUserId);
 
         if (friendsId != null) {
             deleteByFriendsId(friendsId);
+            return;
         }
 
         throw new RelationshipDontExistException("Relationship between user with Id " + firstUserId +
                 " and user with Id " + secondUserId + " dont exists");
     }
 
+    @Override
+    public List<Friends> getFriends() {
+        return friendsRepository.findAll();
+    }
+
+    @Override
+    public void acceptFriendsInvite(final long firstUserId, final long secondUserId) {
+
+        var friends = findFriendsByUsersIds(firstUserId, secondUserId);
+        friends.setStatus(Relationship.ACCEPTED.toString());
+        friendsRepository.saveAndFlush(friends);
+    }
 
 }

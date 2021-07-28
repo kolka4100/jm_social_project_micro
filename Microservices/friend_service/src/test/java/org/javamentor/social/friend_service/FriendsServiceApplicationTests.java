@@ -8,6 +8,7 @@ class FriendsServiceApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

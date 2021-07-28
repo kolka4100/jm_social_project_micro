@@ -30,13 +30,13 @@ public class DataInit {
 
     private void createFriends(int i) {
 
-        Friends relationship = new Friends();
-        relationship.setInvitingUserId((long) i);
-        relationship.setInvitedUserId((long) i + 1);
+        Friends friends = new Friends();
+        friends.setInvitingUserId((long) i);
+        friends.setInvitedUserId((long) i + 1);
 
-        if (i % 2 == 0) relationship.setRelationship(wait.toString());
-        else relationship.setRelationship(accepted.toString());
-        friendRelationshipService.save(relationship);
+        if (i % 2 == 0) friends.setStatus(wait.toString());
+        else friends.setStatus(accepted.toString());
+        friendRelationshipService.save(friends);
     }
 
 }
