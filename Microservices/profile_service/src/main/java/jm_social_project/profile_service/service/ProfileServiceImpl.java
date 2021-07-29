@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,8 @@ public class ProfileServiceImpl implements ProfileService {
 
     @NonNull
     private ProfileRepository profileRepository;
+
+    private Profile profile;
 
     @Override
     public Profile saveProfile(Profile profile, String accountId) {
@@ -49,5 +52,39 @@ public class ProfileServiceImpl implements ProfileService {
         return profileRepository.findById(id).orElse(null);
     }
 
+    @Override
+    public Map getNearbyProfiles(Profile profile) {
 
+        List <Profile> allProfiles = new ArrayList(getAllProfiles());
+
+        //получил Map с профилями входящими в радиус 1км
+        Map profilesInCircle = new HashMap();
+        for(int i = 0; i < allProfiles.size(); i++) {
+
+            int distanceBetween = distanceInKilometers(allProfiles.get(i).getLatitude(), allProfiles.get(i).getLongitude(), profile.getLatitude(), profile.getLongitude());
+
+            if(distanceBetween <= 1) {
+                profilesInCircle.put("key" + i, allProfiles.get(i));
+            }
+        }
+        return profilesInCircle;
+    }
+
+
+    //расчет расстояния между двумя точками по широте и долготе
+    //    public final static double AVERAGE_RADIUS_OF_EARTH_KM = 6371;
+    public int distanceInKilometers(double friendLat, double friendLon,
+                                            double userLat, double userLon) {
+
+        double latDistance = Math.toRadians(friendLat - userLat);
+        double lonDistance = Math.toRadians(friendLon - userLon);
+
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(friendLat)) * Math.cos(Math.toRadians(userLat))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return (int) (Math.round(6371 * c));
+    }
 }

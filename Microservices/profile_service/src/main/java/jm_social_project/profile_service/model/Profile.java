@@ -33,7 +33,10 @@ public class Profile {
 
     private String description;
 
-    private String coordinates;
+//    private String coordinates;
 
+    private Double latitude;
+
+    private Double longitude;
 }
 
