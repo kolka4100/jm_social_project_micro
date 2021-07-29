@@ -5,11 +5,12 @@ import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 import org.javamentor.social.payments_service.model.OrderDetail;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-@Component
+
+@Service
 public class PaymentService {
     @Value("${spring.payment.service.clientId}")
     private String clientId;
@@ -21,8 +22,34 @@ public class PaymentService {
     private String cancelUrl;
     @Value("${spring.payment.service.returnUrl}")
     private String returnUrl;
+    @Value("${spring.payment.service.errorUrl}")
+    private String errorUrl;
+    @Value("${spring.payment.service.endedUrl}")
+    private String endedUrl;
 
+    public String getClientId() {
+        return clientId;
+    }
 
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public String getEndedUrl() {
+        return endedUrl;
+    }
+
+    public String getCancelUrl() {
+        return cancelUrl;
+    }
+
+    public String getReturnUrl() {
+        return returnUrl;
+    }
+
+    public String getErrorUrl() {
+        return errorUrl;
+    }
 
     public String authorizePayment(OrderDetail orderDetail) throws PayPalRESTException {
         Payer payer = getPayerInformation();
@@ -36,6 +63,7 @@ public class PaymentService {
                 .setIntent("authorize");
         APIContext apiContext = new APIContext(clientId, clientSecret, mode);
         Payment approvedPayment = requestPayment.create(apiContext);
+
 
         return getApprovalLink(approvedPayment);
     }
@@ -59,7 +87,18 @@ public class PaymentService {
         return redirectUrls;
     }
 
-    private Payer getPayerInformation() {
+    public Payment executePayment(String paymentId, String payerId) throws PayPalRESTException {
+        PaymentExecution paymentExecution = new PaymentExecution();
+        paymentExecution.setPayerId(payerId);
+
+        Payment payment = new Payment().setId(paymentId);
+
+        APIContext apiContext = new APIContext(clientId, clientSecret, mode);
+
+        return payment.execute(apiContext, paymentExecution);
+    }
+
+    public Payer getPayerInformation() {
         Payer payer = new Payer();
         payer.setPaymentMethod("paypal");
         PayerInfo payerInfo = new PayerInfo();
