@@ -21,4 +21,6 @@ public interface ProfileService {
 
     Map getNearbyProfiles(Profile profile);
 
+    List distanceBetweenProfiles(Profile profile);
+
 }

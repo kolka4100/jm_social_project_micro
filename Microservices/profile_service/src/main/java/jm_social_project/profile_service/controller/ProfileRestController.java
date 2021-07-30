@@ -50,7 +50,7 @@ public class ProfileRestController {
         return ResponseEntity.ok().body(profileService.deleteProfile(id));
     }
 
-    @GetMapping
+    @GetMapping("/nearby-profiles")
     public ResponseEntity<Map> getNearbyProfiles(@RequestBody Profile profile) {
 
         return ResponseEntity.ok().body(profileService.getNearbyProfiles(profile));
