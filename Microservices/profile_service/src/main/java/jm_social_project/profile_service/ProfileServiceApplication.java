@@ -38,7 +38,6 @@ public class ProfileServiceApplication implements CommandLineRunner {
 		repository.save(new Profile("6", "6", "Adam5", "Smith5", "free", "https://", new Date(89, 2, 21),"cool boy", 45.085804,39.040221));
 		repository.save(new Profile("7", "7", "Adam6", "Smith6", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032127,39.086379));
 
-
 		// вывод всех юзеров в консоль
 		System.out.println("Profiles found with findAll():");
 		System.out.println("-------------------------------");
@@ -59,5 +58,4 @@ public class ProfileServiceApplication implements CommandLineRunner {
 		System.out.println(service.distanceBetweenProfiles(new Profile("1", "1", "Adam", "Smith", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032680,38.984446)).toString());
 		System.out.println();
 	}
-
 }
