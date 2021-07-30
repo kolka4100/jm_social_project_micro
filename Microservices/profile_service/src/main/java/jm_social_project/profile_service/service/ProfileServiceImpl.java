@@ -63,11 +63,27 @@ public class ProfileServiceImpl implements ProfileService {
 
             int distanceBetween = distanceInKilometers(allProfiles.get(i).getLatitude(), allProfiles.get(i).getLongitude(), profile.getLatitude(), profile.getLongitude());
 
-            if(distanceBetween <= 1) {
+            if(distanceBetween <= 1000) {
                 profilesInCircle.put("key" + i, allProfiles.get(i));
             }
         }
         return profilesInCircle;
+    }
+    // получил расстояние между юзером и юзерами в радиусе 1 км
+    @Override
+    public List distanceBetweenProfiles(Profile profile) {
+        List <Profile> allProfiles = new ArrayList(getAllProfiles());
+        List profilesDistance = new ArrayList();
+
+        for(int i = 0; i < allProfiles.size(); i++) {
+
+            int distanceBetween = distanceInKilometers(allProfiles.get(i).getLatitude(), allProfiles.get(i).getLongitude(), profile.getLatitude(), profile.getLongitude());
+
+            if(distanceBetween <= 1000) {
+                profilesDistance.add("Растояние между Вами и " + allProfiles.get(i).getFirstName() + " " + allProfiles.get(i).getLastName() + " составляет " + distanceBetween + " метра(ов)");
+            }
+        }
+        return profilesDistance;
     }
 
 
@@ -85,6 +101,6 @@ public class ProfileServiceImpl implements ProfileService {
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        return (int) (Math.round(6371 * c));
+        return (int) (Math.round(6371000 * c));
     }
 }
