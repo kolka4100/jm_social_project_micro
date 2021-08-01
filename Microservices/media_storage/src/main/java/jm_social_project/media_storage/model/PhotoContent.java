@@ -15,7 +15,6 @@ public class PhotoContent {
     private String userId;
     @Indexed
     private String photoPath;
-    private Integer likes = 0;
     private Set<String> likedUsers = new HashSet<>();
 
     public PhotoContent(String id, String userId, String photoPath) {
@@ -46,14 +45,6 @@ public class PhotoContent {
 
     public void setPhotoPath(String photoPath) {
         this.photoPath = photoPath;
-    }
-
-    public Integer getLikes() {
-        return likes;
-    }
-
-    public void setLikes(Integer likes) {
-        this.likes = likes;
     }
 
     public Set<String> getLikedUsers() {

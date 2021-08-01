@@ -52,8 +52,8 @@ public class FileUploadController {
         return new ResponseEntity<>(photoContents, HttpStatus.OK);
     }
 
-    @PostMapping("/{mediaId}/{userId}/like")
-    public ResponseEntity<PhotoContent> like(@PathVariable("mediaId") String photoId,
+    @PostMapping("/{photoId}/{userId}/like")
+    public ResponseEntity<PhotoContent> like(@PathVariable("photoId") String photoId,
                                              @PathVariable("userId") String userId) {
         PhotoContent photoContent = storageService.likePhoto(photoId, userId);
         return new ResponseEntity<>(photoContent, HttpStatus.OK);

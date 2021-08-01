@@ -136,14 +136,12 @@ public class StorageServiceImpl implements StorageService {
         Set<String> likedUsers = photoContent.getLikedUsers();
 
         if (likedUsers.contains(userId)) {
-            photoContent.setLikes(photoContent.getLikes() - 1);
             likedUsers.remove(userId);
-            photoContent.setLikedUsers(likedUsers);
         } else {
-            photoContent.setLikes(photoContent.getLikes() + 1);
             likedUsers.add(userId);
-            photoContent.setLikedUsers(likedUsers);
         }
+
+        photoContent.setLikedUsers(likedUsers);
 
         return photoContentRepository.save(photoContent);
     }
