@@ -9,7 +9,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Component
 public class GatewayFilterImpl implements GatewayFilter {
@@ -27,9 +27,9 @@ public class GatewayFilterImpl implements GatewayFilter {
 
             var headers = exchange.getRequest().getHeaders();
 
-            var jvtToken = headers.getFirst("authorization");
+            var jwtToken = headers.getFirst("authorization");
 
-            if (jvtToken != null && validator.validateToken(jvtToken)) {
+            if (jwtToken != null && validator.validateToken(jwtToken, originalUri )) {
                 return chain.filter(exchange);
             }
 
@@ -42,7 +42,7 @@ public class GatewayFilterImpl implements GatewayFilter {
 
     Mono<Void> onErrorFilter(ServerWebExchange exchange) {
         var response = exchange.getResponse();
-        response.setStatusCode(BAD_REQUEST);
+        response.setStatusCode(UNAUTHORIZED);
         return response.setComplete();
 
     }
