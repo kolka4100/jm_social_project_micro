@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,5 +48,11 @@ public class ProfileRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteProfile(@PathVariable String id) {
         return ResponseEntity.ok().body(profileService.deleteProfile(id));
+    }
+
+    @GetMapping("/nearby-profiles")
+    public ResponseEntity<Map> getNearbyProfiles(@RequestBody Profile profile) {
+
+        return ResponseEntity.ok().body(profileService.getNearbyProfiles(profile));
     }
 }

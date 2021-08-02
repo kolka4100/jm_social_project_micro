@@ -15,6 +15,19 @@ import java.util.Date;
 @Document(collection = "profile")
 public class Profile {
 
+    public Profile(String id, String accountId, String firstName, String lastName, String status, String avatarUrl, Date birthDate, String description, Double latitude, Double longitude) {
+        this.id = id;
+        this.accountId = accountId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.status = status;
+        this.avatarUrl = avatarUrl;
+        this.birthDate = birthDate;
+        this.description = description;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     @Id
     private String id;
 
@@ -33,7 +46,9 @@ public class Profile {
 
     private String description;
 
-    private String coordinates;
+    private Double latitude;
+
+    private Double longitude;
 
 }
 

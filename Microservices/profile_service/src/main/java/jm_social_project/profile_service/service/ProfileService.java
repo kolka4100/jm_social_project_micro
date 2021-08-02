@@ -3,6 +3,7 @@ package jm_social_project.profile_service.service;
 import jm_social_project.profile_service.model.Profile;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProfileService {
 
@@ -12,9 +13,14 @@ public interface ProfileService {
 
     boolean deleteProfile(String id);
 
-    List<Profile> getAllProfiles();
+    List <Profile> getAllProfiles();
 
     Profile getProfileById(String id);
 
     Profile getProfileByAccountId(String accountId);
+
+    Map getNearbyProfiles(Profile profile);
+
+    List distanceBetweenProfiles(Profile profile);
+
 }
