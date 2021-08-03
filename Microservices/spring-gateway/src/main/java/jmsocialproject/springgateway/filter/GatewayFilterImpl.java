@@ -1,51 +1,73 @@
 package jmsocialproject.springgateway.filter;
 
+import io.jsonwebtoken.*;
 import jmsocialproject.springgateway.validator.RouteValidation;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Component
+@Log
 public class GatewayFilterImpl implements GatewayFilter {
 
     @Autowired
-    RouteValidation validator;
-
+    private RouteValidation validator;
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     @Override
     public Mono<Void> filter(final ServerWebExchange exchange, final GatewayFilterChain chain) {
 
-        var originalUri = exchange.getAttributeOrDefault(GATEWAY_ORIGINAL_REQUEST_URL_ATTR, "Unknown");
+        String originalUri = exchange.getAttributeOrDefault(GATEWAY_ORIGINAL_REQUEST_URL_ATTR, "Unknown");
 
-        if (!validator.isOpenApi(originalUri)) {
+        String jwtToken = exchange.getRequest().getHeaders().getFirst("authorization");
 
-            var headers = exchange.getRequest().getHeaders();
+        String roleName = getRoleName(jwtToken);
 
-            var jwtToken = headers.getFirst("authorization");
-
-            if (jwtToken != null && validator.validateToken(jwtToken, originalUri )) {
+        if (roleName != null) {
+            if (validator.checkMapping(jwtToken, originalUri)) {
                 return chain.filter(exchange);
+            } else {
+                ServerHttpResponse response = exchange.getResponse();
+                response.setStatusCode(UNAUTHORIZED);
+                return response.setComplete();
             }
-
-            return this.onErrorFilter(exchange);
+        } else if(validator.isOpenApi(originalUri)) {
+            return chain.filter(exchange);
+        } else {
+            ServerHttpResponse response = exchange.getResponse();
+            response.setStatusCode(BAD_REQUEST);
+            return response.setComplete();
         }
-
-        return chain.filter(exchange);
-
     }
 
-    Mono<Void> onErrorFilter(ServerWebExchange exchange) {
-        var response = exchange.getResponse();
-        response.setStatusCode(UNAUTHORIZED);
-        return response.setComplete();
+    private String getRoleName(String jwtToken) {
+        try {
+            Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwtToken).getBody();
 
+            return claims.get("role", String.class);
+
+        } catch (ExpiredJwtException expEx) {
+            log.severe("Token expired");
+        } catch (UnsupportedJwtException unsEx) {
+            log.severe("Unsupported jwt");
+        } catch (MalformedJwtException mjEx) {
+            log.severe("Malformed jwt");
+        } catch (SignatureException sEx) {
+            log.severe("Invalid signature");
+        } catch (Exception e) {
+            log.severe("Invalid token");
+        }
+        return null;
     }
-
-
 }
