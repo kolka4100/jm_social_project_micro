@@ -16,11 +16,19 @@ public class RouteValidationImpl implements RouteValidation {
 
     @Override
     public boolean isOpenApi(String url) {
-        return openApi.contains(url);
+        for(String open: openApi){
+            if(url.contains(open))
+                return true;
+        }
+        return false;
     }
 
     @Override
     public boolean checkMapping(String roleName, String url) {
-        return mapClosedApi.get(roleName).contains(url);
+        for(String close: mapClosedApi.get(roleName)){
+            if(url.contains(close))
+                return true;
+        }
+        return false;
     }
 }

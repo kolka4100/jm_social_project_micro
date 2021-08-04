@@ -32,10 +32,9 @@ public class GatewayFilterImpl implements GatewayFilter {
 
         String jwtToken = exchange.getRequest().getHeaders().getFirst("authorization");
 
-        String roleName = getRoleName(jwtToken);
-
-        if (roleName != null) {
-            if (validator.checkMapping(jwtToken, originalUri)) {
+        if (jwtToken != null) {
+            String roleName = getRoleName(jwtToken);
+            if (validator.checkMapping(roleName, originalUri)) {
                 return chain.filter(exchange);
             } else {
                 ServerHttpResponse response = exchange.getResponse();
