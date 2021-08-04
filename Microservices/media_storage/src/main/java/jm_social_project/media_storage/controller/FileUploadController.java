@@ -1,5 +1,6 @@
 package jm_social_project.media_storage.controller;
 
+import jm_social_project.media_storage.dto.PhotoDTO;
 import jm_social_project.media_storage.model.PhotoContent;
 import jm_social_project.media_storage.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,22 +42,27 @@ public class FileUploadController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<PhotoContent>> getAllMediaContent() {
+    public ResponseEntity<List<PhotoContent>> getAllPhotoContent() {
         List<PhotoContent> photoContents = storageService.getAllPhotoContent();
         return new ResponseEntity<>(photoContents, HttpStatus.OK);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<PhotoContent>> getMediaContentByUserId(@PathVariable String userId) {
+    public ResponseEntity<List<PhotoContent>> getPhotoContentByUserId(@PathVariable String userId) {
         List<PhotoContent> photoContents = storageService.getPhotoContentByUserId(userId);
         return new ResponseEntity<>(photoContents, HttpStatus.OK);
     }
 
-    @PostMapping("/{photoId}/{userId}/like")
+    @PostMapping("/{userId}/like/{photoId}")
     public ResponseEntity<PhotoContent> like(@PathVariable("photoId") String photoId,
                                              @PathVariable("userId") String userId) {
         PhotoContent photoContent = storageService.likePhoto(photoId, userId);
         return new ResponseEntity<>(photoContent, HttpStatus.OK);
     }
 
+    @GetMapping("/photo/{photoId}")
+    public ResponseEntity<PhotoDTO> getPhotoDTOByPhotoId(@PathVariable("photoId") String photoId) {
+        PhotoDTO photoDTO = storageService.photoContentToPhotoDTO(photoId);
+        return new ResponseEntity<>(photoDTO, HttpStatus.OK);
+    }
 }
