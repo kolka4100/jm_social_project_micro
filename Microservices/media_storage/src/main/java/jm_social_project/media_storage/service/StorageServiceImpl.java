@@ -1,6 +1,7 @@
 package jm_social_project.media_storage.service;
 
 
+import jm_social_project.media_storage.dto.PhotoDTO;
 import jm_social_project.media_storage.exception.PhotoContentNotFoundException;
 import jm_social_project.media_storage.exception.StorageException;
 import jm_social_project.media_storage.model.PhotoContent;
@@ -36,6 +37,7 @@ public class StorageServiceImpl implements StorageService {
 
     @Autowired
     private PhotoContentRepository photoContentRepository;
+
 
 
     public void store(MultipartFile file, String userId) {
@@ -84,7 +86,7 @@ public class StorageServiceImpl implements StorageService {
 
         Account account = accountService.findById(Long.parseLong(userId));
 
-        int photoNumber = profilePhotoService
+        long photoNumber = profilePhotoService
                 .findAllByProfileId(account.getProfile()).size() + 1;
 
         long profileId = account.getProfile().getId();
@@ -104,7 +106,7 @@ public class StorageServiceImpl implements StorageService {
             storeFileToFilesystem(rootLocation,
                     destinationFile, file);
             profilePhotoService.add(photo);
-            photoContentRepository.save(new PhotoContent(Integer.toString(photoNumber), userId, destinationFile.toString()));
+            photoContentRepository.save(new PhotoContent(photoNumber, userId, destinationFile.toString()));
         } catch (IOException e) {
             throw new StorageException("Failed to store photo.", e);
         }
@@ -129,11 +131,11 @@ public class StorageServiceImpl implements StorageService {
         return photoContentRepository.findPhotoContentByUserId(userId);
     }
 
-    public PhotoContent likePhoto(String photoContentId, String userId) {
-        PhotoContent photoContent = photoContentRepository.findById(photoContentId)
-                .orElseThrow(() -> new PhotoContentNotFoundException("Media content cannot be found"));
+    public PhotoContent likePhoto(String photoId, String userId) {
+        PhotoContent photoContent = photoContentRepository.findById(photoId)
+                .orElseThrow(() -> new PhotoContentNotFoundException("Photo content cannot be found"));
 
-        Set<String> likedUsers = photoContent.getLikedUsers();
+        Set<String> likedUsers = photoContent.getLikedUserIds();
 
         if (likedUsers.contains(userId)) {
             likedUsers.remove(userId);
@@ -141,8 +143,16 @@ public class StorageServiceImpl implements StorageService {
             likedUsers.add(userId);
         }
 
-        photoContent.setLikedUsers(likedUsers);
+        photoContent.setLikedUserIds(likedUsers);
 
         return photoContentRepository.save(photoContent);
     }
+
+    public PhotoDTO photoContentToPhotoDTO(String photoId) {
+        PhotoContent photo = photoContentRepository.findById(photoId)
+                .orElseThrow(() -> new PhotoContentNotFoundException("Photo content cannot be found"));
+
+        return new PhotoDTO(photo, photo.getLikedUserIds().size());
+    }
+
 }
