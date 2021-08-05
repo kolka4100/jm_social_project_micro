@@ -10,25 +10,24 @@ import java.util.Set;
 @RedisHash("Photo")
 public class PhotoContent {
     @Id
-    private String id;
+    private Long photoId;
     @Indexed
     private String userId;
-    @Indexed
     private String photoPath;
-    private Set<String> likedUsers = new HashSet<>();
+    private Set<String> likedUserIds = new HashSet<>();
 
-    public PhotoContent(String id, String userId, String photoPath) {
-        this.id = id;
+    public PhotoContent(Long photoId, String userId, String photoPath) {
+        this.photoId = photoId;
         this.userId = userId;
         this.photoPath = photoPath;
     }
 
-    public String getId() {
-        return id;
+    public Long getPhotoId() {
+        return photoId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPhotoId(Long photoId) {
+        this.photoId = photoId;
     }
 
     public String getUserId() {
@@ -47,11 +46,11 @@ public class PhotoContent {
         this.photoPath = photoPath;
     }
 
-    public Set<String> getLikedUsers() {
-        return likedUsers;
+    public Set<String> getLikedUserIds() {
+        return likedUserIds;
     }
 
-    public void setLikedUsers(Set<String> likedUsers) {
-        this.likedUsers = likedUsers;
+    public void setLikedUserIds(Set<String> likedUserIds) {
+        this.likedUserIds = likedUserIds;
     }
 }
