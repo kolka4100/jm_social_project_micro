@@ -88,11 +88,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public String getStatusById(Long userId) {
-        Account account = findById(userId);
-        if(account == null) {
-            throw new NoSuchUserException("No account with id " + userId);
-        }
-        AccountDTO accountDTO = new AccountDTO(account);
+        AccountDTO accountDTO = accountDao.findAccountDtoById(userId);
         return accountDTO.getStatus().name();
     }
 }

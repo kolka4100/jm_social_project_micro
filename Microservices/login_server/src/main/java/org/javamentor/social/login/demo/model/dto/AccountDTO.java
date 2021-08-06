@@ -7,11 +7,9 @@ import org.javamentor.social.login.demo.model.AccountStatus;
 @Data
 public class AccountDTO {
 
-    private String email;
     private AccountStatus status;
 
-    public AccountDTO(Account account) {
-        this.email = account.getEmail();
-        this.status = account.getStatus();
+    public AccountDTO(AccountStatus status) {
+        this.status = status;
     }
 }
