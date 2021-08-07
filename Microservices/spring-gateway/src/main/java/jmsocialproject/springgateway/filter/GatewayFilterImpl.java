@@ -33,21 +33,23 @@ public class GatewayFilterImpl implements GatewayFilter {
         String jwtToken = exchange.getRequest().getHeaders().getFirst("authorization");
 
         if (jwtToken != null) {
+
             String roleName = getRoleName(jwtToken);
-            if (validator.checkMapping(roleName, originalUri)) {
-                return chain.filter(exchange);
-            } else {
+
+            if (!validator.checkMapping(roleName, originalUri)) {
                 ServerHttpResponse response = exchange.getResponse();
                 response.setStatusCode(UNAUTHORIZED);
                 return response.setComplete();
             }
-        } else if(validator.isOpenApi(originalUri)) {
-            return chain.filter(exchange);
-        } else {
+
+        } else if (!validator.isOpenApi(originalUri)) {
             ServerHttpResponse response = exchange.getResponse();
             response.setStatusCode(BAD_REQUEST);
             return response.setComplete();
         }
+
+        return chain.filter(exchange);
+
     }
 
     private String getRoleName(String jwtToken) {
