@@ -21,8 +21,7 @@ public class ProfileServiceImpl implements ProfileService {
     private Profile profile;
 
     @Override
-    public Profile saveProfile(Profile profile, String accountId) {
-        profile.setAccountId(accountId);
+    public Profile saveProfile(Profile profile) {
         return profileRepository.insert(profile);
     }
 

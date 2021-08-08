@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface ProfileService {
 
-    Profile saveProfile(Profile profile, String accountId);
+    Profile saveProfile(Profile profile);
 
     Profile updateProfile(Profile profile);
 

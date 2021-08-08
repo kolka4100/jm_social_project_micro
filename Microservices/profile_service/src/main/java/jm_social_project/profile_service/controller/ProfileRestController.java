@@ -1,5 +1,6 @@
 package jm_social_project.profile_service.controller;
 
+import jm_social_project.profile_service.config_annotation.AuthPrincipalIdFromHeader;
 import jm_social_project.profile_service.model.Profile;
 import jm_social_project.profile_service.service.ProfileService;
 import lombok.NonNull;
@@ -19,10 +20,10 @@ public class ProfileRestController {
     @NonNull
     private ProfileService profileService;
 
+    @AuthPrincipalIdFromHeader
     @PostMapping
-    public ResponseEntity<Profile> createProfile(@RequestBody Profile profile, @RequestHeader HttpHeaders httpHeaders) {
-        String accountId = httpHeaders.getFirst("user_id");
-        return ResponseEntity.ok().body(profileService.saveProfile(profile, accountId));
+    public ResponseEntity<Profile> createProfile(@RequestBody Profile profile) {
+        return ResponseEntity.ok().body(profileService.saveProfile(profile));
     }
 
     @GetMapping("/{accountId}")
