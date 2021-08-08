@@ -30,6 +30,8 @@ public class Account implements UserDetails {
 
     private Boolean enable;
 
+    private AccountStatus status;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;

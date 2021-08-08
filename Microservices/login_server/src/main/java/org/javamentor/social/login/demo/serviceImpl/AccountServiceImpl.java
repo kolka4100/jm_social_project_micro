@@ -4,7 +4,9 @@ import org.javamentor.social.login.demo.config.JwtTokenProvider;
 import org.javamentor.social.login.demo.dao.AccountDao;
 import org.javamentor.social.login.demo.dao.RoleDao;
 import org.javamentor.social.login.demo.exceptions.BlockUserException;
+import org.javamentor.social.login.demo.exceptions.NoSuchUserException;
 import org.javamentor.social.login.demo.model.Account;
+import org.javamentor.social.login.demo.model.dto.AccountDTO;
 import org.javamentor.social.login.demo.model.dto.AuthorizeDto;
 import org.javamentor.social.login.demo.model.request.AuthRequest;
 import org.javamentor.social.login.demo.service.AccountService;
@@ -83,5 +85,10 @@ public class AccountServiceImpl implements AccountService {
     public String getUserEmailByUserId(final Long userId) {
         Optional<Account> accountOptional = accountDao.findById(userId);
         return accountOptional.map(Account::getEmail).orElse(null);
+    }
+
+    public String getStatusById(Long userId) {
+        AccountDTO accountDTO = accountDao.findAccountDtoById(userId);
+        return accountDTO.getStatus().name();
     }
 }

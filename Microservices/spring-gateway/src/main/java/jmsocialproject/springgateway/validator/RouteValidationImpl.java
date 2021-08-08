@@ -1,5 +1,6 @@
 package jmsocialproject.springgateway.validator;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.jsonwebtoken.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
