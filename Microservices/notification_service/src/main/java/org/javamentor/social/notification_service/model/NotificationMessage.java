@@ -28,5 +28,5 @@ public class NotificationMessage implements Message<String> {
 	@Override
 	public MessageHeaders getHeaders() {  // TODO
 		return null;
-	}
+	}  // TODO
 }
