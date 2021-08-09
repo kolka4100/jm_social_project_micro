@@ -1,5 +1,6 @@
 package jmsocialproject.springgateway.filter;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.jsonwebtoken.*;
 import jmsocialproject.springgateway.validator.RouteValidation;
 import lombok.extern.java.Log;
@@ -25,7 +26,10 @@ public class GatewayFilterImpl implements GatewayFilter {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
+
+
     @Override
+    @HystrixCommand(fallbackMethod = "getFilterFallback")
     public Mono<Void> filter(final ServerWebExchange exchange, final GatewayFilterChain chain) {
 
         String originalUri = exchange.getAttributeOrDefault(GATEWAY_ORIGINAL_REQUEST_URL_ATTR, "Unknown");
@@ -49,6 +53,19 @@ public class GatewayFilterImpl implements GatewayFilter {
         }
 
         return chain.filter(exchange);
+
+
+    }
+
+    public Mono getFilterFallback()
+    {
+        return Mono.just("Gateway service is down!");
+    }
+
+    Mono<Void> onErrorFilter(ServerWebExchange exchange) {
+        var response = exchange.getResponse();
+        response.setStatusCode(BAD_REQUEST);
+        return response.setComplete();
 
     }
 

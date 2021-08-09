@@ -6,6 +6,7 @@ import org.javamentor.social.login.demo.model.Account;
 import org.javamentor.social.login.demo.model.dto.AuthorizeDto;
 import org.javamentor.social.login.demo.model.request.AuthRequest;
 import org.javamentor.social.login.demo.service.AccountService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -30,4 +31,8 @@ public class UserDataController{
         }
     }
 
+    @GetMapping("/status/{userId}")
+    public String getStatus(@PathVariable("userId") Long userId) {
+        return accountService.getStatusById(userId);
+    }
 }

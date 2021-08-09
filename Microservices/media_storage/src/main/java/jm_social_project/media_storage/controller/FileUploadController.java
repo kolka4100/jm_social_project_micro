@@ -1,11 +1,16 @@
 package jm_social_project.media_storage.controller;
 
+import jm_social_project.media_storage.dto.PhotoDTO;
+import jm_social_project.media_storage.model.PhotoContent;
+import jm_social_project.media_storage.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.security.Principal;
+import java.util.List;
 
 
 @RestController
@@ -22,16 +27,42 @@ public class FileUploadController {
 
     @PostMapping("/upload_video/")
     public String handleVideoUpload(@RequestParam("file") MultipartFile file,
-                                    Principal principal) {
-        storageService.store(file, principal);
+                                    @RequestHeader HttpHeaders httpHeaders) {
+        String accountId = httpHeaders.getFirst("user_id");
+        storageService.store(file, accountId);
         return "You successfully uploaded video " + file.getOriginalFilename() + "!";
     }
 
     @PostMapping("/upload_photo/")
     public String handlePhotoUpload(@RequestParam("file") MultipartFile file,
-                                    Principal principal) {
-        storageService.store(file, principal);
+                                    @RequestHeader HttpHeaders httpHeaders) {
+        String accountId = httpHeaders.getFirst("user_id");
+        storageService.store(file, accountId);
         return "You successfully uploaded photo " + file.getOriginalFilename() + "!";
     }
 
+    @GetMapping()
+    public ResponseEntity<List<PhotoContent>> getAllPhotoContent() {
+        List<PhotoContent> photoContents = storageService.getAllPhotoContent();
+        return new ResponseEntity<>(photoContents, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<PhotoContent>> getPhotoContentByUserId(@PathVariable String userId) {
+        List<PhotoContent> photoContents = storageService.getPhotoContentByUserId(userId);
+        return new ResponseEntity<>(photoContents, HttpStatus.OK);
+    }
+
+    @PostMapping("/{userId}/like/{photoId}")
+    public ResponseEntity<PhotoContent> like(@PathVariable("photoId") String photoId,
+                                             @PathVariable("userId") String userId) {
+        PhotoContent photoContent = storageService.likePhoto(photoId, userId);
+        return new ResponseEntity<>(photoContent, HttpStatus.OK);
+    }
+
+    @GetMapping("/photo/{photoId}")
+    public ResponseEntity<PhotoDTO> getPhotoDTOByPhotoId(@PathVariable("photoId") String photoId) {
+        PhotoDTO photoDTO = storageService.photoContentToPhotoDTO(photoId);
+        return new ResponseEntity<>(photoDTO, HttpStatus.OK);
+    }
 }
