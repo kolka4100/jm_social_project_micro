@@ -1,17 +1,11 @@
 package jmsocialproject.springgateway.validator;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import io.jsonwebtoken.*;
-import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Component
-@Log
 public class RouteValidationImpl implements RouteValidation {
 
     private final List<String> openApi = List.of("/api/rest/auth/login", "/api/rest/auth/registration");

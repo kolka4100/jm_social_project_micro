@@ -13,9 +13,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.Date;
+
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 
 @Component
 @Log
@@ -38,17 +39,23 @@ public class GatewayFilterImpl implements GatewayFilter {
 
         if (jwtToken != null) {
 
+            if (!validateToken(jwtToken)) {
+                ServerHttpResponse response = exchange.getResponse();
+                response.setStatusCode(LOCKED);
+                return response.setComplete();
+            }
+
             String roleName = getRoleName(jwtToken);
 
             if (!validator.checkMapping(roleName, originalUri)) {
                 ServerHttpResponse response = exchange.getResponse();
-                response.setStatusCode(UNAUTHORIZED);
+                response.setStatusCode(NOT_ACCEPTABLE);
                 return response.setComplete();
             }
 
         } else if (!validator.isOpenApi(originalUri)) {
             ServerHttpResponse response = exchange.getResponse();
-            response.setStatusCode(BAD_REQUEST);
+            response.setStatusCode(UNAUTHORIZED);
             return response.setComplete();
         }
 
@@ -62,18 +69,12 @@ public class GatewayFilterImpl implements GatewayFilter {
         return Mono.just("Gateway service is down!");
     }
 
-    Mono<Void> onErrorFilter(ServerWebExchange exchange) {
-        var response = exchange.getResponse();
-        response.setStatusCode(BAD_REQUEST);
-        return response.setComplete();
-
-    }
-
-    private String getRoleName(String jwtToken) {
+    private boolean validateToken(String jwtToken) {
         try {
-            Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwtToken).getBody();
-
-            return claims.get("role", String.class);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwtToken);
+            if(!claims.getBody().getExpiration().before(new Date())){
+                return true;
+            }
 
         } catch (ExpiredJwtException expEx) {
             log.severe("Token expired");
@@ -86,6 +87,13 @@ public class GatewayFilterImpl implements GatewayFilter {
         } catch (Exception e) {
             log.severe("Invalid token");
         }
-        return null;
+        return false;
     }
+    private String getRoleName(String jwtToken) {
+
+        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwtToken).getBody();
+        return claims.get("role", String.class);
+
+    }
+
 }
