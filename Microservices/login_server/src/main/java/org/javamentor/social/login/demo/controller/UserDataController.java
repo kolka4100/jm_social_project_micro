@@ -1,12 +1,7 @@
 package org.javamentor.social.login.demo.controller;
 
-import io.swagger.annotations.ApiOperation;
 import org.javamentor.social.login.demo.exceptions.NoSuchUserException;
-import org.javamentor.social.login.demo.model.Account;
-import org.javamentor.social.login.demo.model.dto.AuthorizeDto;
-import org.javamentor.social.login.demo.model.request.AuthRequest;
 import org.javamentor.social.login.demo.service.AccountService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 
