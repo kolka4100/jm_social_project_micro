@@ -2,6 +2,7 @@ package org.javamentor.social.payments_service.Controller;
 
 
 import com.paypal.base.rest.PayPalRESTException;
+import io.swagger.annotations.ApiOperation;
 import org.javamentor.social.payments_service.model.OrderDetail;
 import org.javamentor.social.payments_service.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class PaymentController {
     }
 
     @GetMapping("/get")
+    @ApiOperation("Gets a form for pay")
     private void testGetMethod(HttpServletResponse response) throws IOException {
 
 
@@ -55,6 +57,7 @@ public class PaymentController {
     }
 
     @PostMapping("/pay")
+    @ApiOperation("Payment")
     private String payTestProductMethod1(@RequestParam("subtotal") String subtotal, @RequestParam("shipping") String shipping, @RequestParam("tax") String tax, @RequestParam("total") String total) {
 
         OrderDetail testOrder = new OrderDetail("testProduct", subtotal, shipping, tax, total);
@@ -70,6 +73,7 @@ public class PaymentController {
     }
 
     @GetMapping("/cancel")
+    @ApiOperation("Cancel a payment")
     private void cancelPay(HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
@@ -87,6 +91,7 @@ public class PaymentController {
     }
 
     @GetMapping("/execute")
+    @ApiOperation("Gets a form to confirm the payment execution")
     private void testGetExecute(HttpServletResponse response, @RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) throws IOException {
 
 
@@ -110,6 +115,7 @@ public class PaymentController {
     }
 
     @PostMapping("/execute")
+    @ApiOperation("Executes payment")
     private String executePayment(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
 
 
@@ -124,6 +130,7 @@ public class PaymentController {
     }
 
     @GetMapping("/ended")
+    @ApiOperation("Confirmation that the payment done")
     private void endedPayment(HttpServletResponse response) throws IOException {
 
         response.setContentType("text/html;charset=utf-8");

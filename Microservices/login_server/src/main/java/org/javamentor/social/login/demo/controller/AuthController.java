@@ -25,7 +25,10 @@ public class AuthController implements Client{
         return accountService.getAuthorizeDto(request);
     }
 
+
     @PostMapping("/registration")
+    @ApiOperation(value = "Register users",
+            notes = "Provide an email and password for registration")
     public void register(@RequestBody AuthRequest request) {
         accountService.register(request);
     }

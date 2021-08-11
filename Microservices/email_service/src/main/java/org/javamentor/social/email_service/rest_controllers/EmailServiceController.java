@@ -1,5 +1,6 @@
 package org.javamentor.social.email_service.rest_controllers;
 
+import io.swagger.annotations.ApiOperation;
 import org.javamentor.social.email_service.model.RequestWrapper;
 import org.javamentor.social.email_service.model.dto.MailDto;
 import org.javamentor.social.email_service.service.EmailService;
@@ -29,11 +30,15 @@ public class EmailServiceController {
    }
 
    @PostMapping("/send-greeting-mail")
+   @ApiOperation(value = "Send an email",
+           notes = "Sends a welcome email")
    public void sendEmail(@RequestBody String email){
        emailService.sendGreetingHtmlEmail(email);
    }
 
    @PostMapping("/send-mail")
+   @ApiOperation(value = "Send an email by id",
+           notes = "Provide an email, subject, text of mail and user id for sends email")
    public void sendEmail(@RequestBody MailDto mailDto,
 //                         @RequestHeader Map<String, String> headers) {
                          @RequestHeader("user_id") String userId){
@@ -45,11 +50,15 @@ public class EmailServiceController {
    }
 
    @PostMapping("/send-greeting-html-mail")
+   @ApiOperation(value = "Send an email",
+           notes = "Sends a welcome email")
    public void sendGreetingHtmlEmail(@RequestBody String email){
        emailService.sendGreetingHtmlEmail(email);
    }
 
    @PostMapping("/send-registration-notification")
+   @ApiOperation(value = "Send a registration notification",
+           notes = "Provide an AccountDTO, Profile for sends registration notification")
    public void sendRegistrationNotification(@RequestBody RequestWrapper wrapper){
        emailService.sendRegistrationNotification(wrapper.getAccountDto().getEmail(),
                wrapper.getProfile().getFirstName(),
@@ -57,6 +66,8 @@ public class EmailServiceController {
    }
 
    @PostMapping("/send-payment-notification")
+   @ApiOperation(value = "Send a payment notification",
+           notes = "Provide an AccountDTO, Profile and subscription period in days for sends registration notification")
    public void sendPaymentNotification(@RequestBody RequestWrapper wrapper){
        emailService.sendPaymentNotification(wrapper.getAccountDto().getEmail(),
                wrapper.getLastDays(),

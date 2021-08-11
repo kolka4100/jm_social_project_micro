@@ -1,7 +1,6 @@
 package org.javamentor.social.login.demo.dao;
 
 import org.javamentor.social.login.demo.model.Account;
-import org.javamentor.social.login.demo.model.AccountStatus;
 import org.javamentor.social.login.demo.model.dto.AccountDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
