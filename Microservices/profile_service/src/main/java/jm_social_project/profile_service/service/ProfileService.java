@@ -13,7 +13,7 @@ public interface ProfileService {
 
     boolean deleteProfile(String id);
 
-    List <Profile> getAllProfiles();
+    List<Profile> getAllProfiles();
 
     Profile getProfileById(String id);
 
