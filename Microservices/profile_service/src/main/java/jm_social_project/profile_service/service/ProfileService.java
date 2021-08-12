@@ -7,13 +7,13 @@ import java.util.Map;
 
 public interface ProfileService {
 
-    Profile saveProfile(Profile profile);
+    Profile saveProfile(Profile profile, String accountId);
 
     Profile updateProfile(Profile profile);
 
     boolean deleteProfile(String id);
 
-    List <Profile> getAllProfiles();
+    List<Profile> getAllProfiles();
 
     Profile getProfileById(String id);
 

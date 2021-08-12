@@ -21,7 +21,8 @@ public class ProfileServiceImpl implements ProfileService {
     private Profile profile;
 
     @Override
-    public Profile saveProfile(Profile profile) {
+    public Profile saveProfile(Profile profile, String accountId) {
+        profile.setAccountId(accountId);
         return profileRepository.insert(profile);
     }
 
@@ -54,31 +55,32 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Map getNearbyProfiles(Profile profile) {
 
-        List <Profile> allProfiles = new ArrayList(getAllProfiles());
+        List<Profile> allProfiles = new ArrayList(getAllProfiles());
 
         //получил Map с профилями входящими в радиус 1км
         Map profilesInCircle = new HashMap();
-        for(int i = 0; i < allProfiles.size(); i++) {
+        for (int i = 0; i < allProfiles.size(); i++) {
 
             int distanceBetween = distanceInKilometers(allProfiles.get(i).getLatitude(), allProfiles.get(i).getLongitude(), profile.getLatitude(), profile.getLongitude());
 
-            if(distanceBetween <= 1000) {
+            if (distanceBetween <= 1000) {
                 profilesInCircle.put("key" + i, allProfiles.get(i));
             }
         }
         return profilesInCircle;
     }
+
     // получил расстояние между юзером и юзерами в радиусе 1 км
     @Override
     public List distanceBetweenProfiles(Profile profile) {
-        List <Profile> allProfiles = new ArrayList(getAllProfiles());
+        List<Profile> allProfiles = new ArrayList(getAllProfiles());
         List profilesDistance = new ArrayList();
 
-        for(int i = 0; i < allProfiles.size(); i++) {
+        for (int i = 0; i < allProfiles.size(); i++) {
 
             int distanceBetween = distanceInKilometers(allProfiles.get(i).getLatitude(), allProfiles.get(i).getLongitude(), profile.getLatitude(), profile.getLongitude());
 
-            if(distanceBetween <= 1000) {
+            if (distanceBetween <= 1000) {
                 profilesDistance.add("Растояние между Вами и " + allProfiles.get(i).getFirstName() + " " + allProfiles.get(i).getLastName() + " составляет " + distanceBetween + " метра(ов)");
             }
         }
@@ -89,7 +91,7 @@ public class ProfileServiceImpl implements ProfileService {
     //расчет расстояния между двумя точками по широте и долготе
     //    public final static double AVERAGE_RADIUS_OF_EARTH_KM = 6371;
     public int distanceInKilometers(double friendLat, double friendLon,
-                                            double userLat, double userLon) {
+                                    double userLat, double userLon) {
 
         double latDistance = Math.toRadians(friendLat - userLat);
         double lonDistance = Math.toRadians(friendLon - userLon);

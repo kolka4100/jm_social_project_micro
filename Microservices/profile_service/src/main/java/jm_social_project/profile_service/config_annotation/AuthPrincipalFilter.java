@@ -10,11 +10,6 @@ import java.io.IOException;
 @Component
 public class AuthPrincipalFilter implements Filter {
 
-    //Использовал фильтр. Что то похожее в AuthPrincipal
-    //В принципе все хорошо, но этот фильтр будет дергаться при каждом запросе(если я правильно понимаю)
-    //Следовательно, наверно нужно какую нибудь проверку сделать
-    //Типа, если метод пост то дергаем у него user_id
-
     private String authHeader;
 
     public String getAuthHeader() {
@@ -28,7 +23,6 @@ public class AuthPrincipalFilter implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
-
         String authHeader1 = req.getHeader("user_id");
 
         if (authHeader1 == null) {
