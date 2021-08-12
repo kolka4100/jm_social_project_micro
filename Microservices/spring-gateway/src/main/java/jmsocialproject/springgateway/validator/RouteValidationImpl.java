@@ -1,51 +1,33 @@
 package jmsocialproject.springgateway.validator;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import io.jsonwebtoken.*;
-import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Component
-@Log
 public class RouteValidationImpl implements RouteValidation {
 
-    private final List<String> openApi;
+    private final List<String> openApi = List.of("/api/rest/auth/login", "/api/rest/auth/registration");
 
-    private final String jwtSecret;
-
-    public RouteValidationImpl( @Value("${jwt.secret}") final String jwtSecret) {
-        this.openApi = new ArrayList<>();
-        openApi.add("/api/rest/auth/login");
-        openApi.add("/api/rest/auth/registration");
-
-
-        this.jwtSecret = jwtSecret;
-    }
+    private final Map<String, List<String>> mapClosedApi = Map.of("ROLE_USER", List.of("/api/user"),
+            "ROLE_MODERATOR", List.of("/api/user", "/api/moderator"),
+            "ROLE_ADMIN", List.of("/api/user", "/api/moderator", "/api/admin"));
 
     @Override
     public boolean isOpenApi(String url) {
-        return openApi.contains(url);
+        for(String open: openApi){
+            if(url.contains(open))
+                return true;
+        }
+        return false;
     }
 
     @Override
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
-            return true;
-        } catch (ExpiredJwtException expEx) {
-            log.severe("Token expired");
-        } catch (UnsupportedJwtException unsEx) {
-            log.severe("Unsupported jwt");
-        } catch (MalformedJwtException mjEx) {
-            log.severe("Malformed jwt");
-        } catch (SignatureException sEx) {
-            log.severe("Invalid signature");
-        } catch (Exception e) {
-            log.severe("invalid token");
+    public boolean checkMapping(String roleName, String url) {
+        for(String close: mapClosedApi.get(roleName)){
+            if(url.contains(close))
+                return true;
         }
         return false;
     }
