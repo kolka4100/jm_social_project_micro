@@ -1,17 +1,13 @@
 package org.javamentor.social.notification_service.controller;
 
 import lombok.*;
-import org.javamentor.social.notification_service.model.NotificationMessage;
 import org.javamentor.social.notification_service.service.LoginServerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class NotificationController {
 
 	private final LoginServerService loginServerService;
+	private final SimpMessagingTemplate messagingTemplate;
 
 	/**
 	 * @Payload для извлечения полезной нагрузки сообщения и, при необходимости,
@@ -33,22 +30,22 @@ public class NotificationController {
 	 * @return сообщение, и отправляет в указанное в @SendTo("URL-адрес") место назначения.
 	 */
 	@PostMapping("/notification/")  // отображение сообщения, направленного по URL-адресу / сообщению.
-	@SendToUser("/topic/{id}")  // возвращаемое значение должно быть преобразовано в сообщение, если необходимо, и отправлено в указанное место назначения.
-	public String sendNotification(@Payload String message,
+//	@SendToUser("/queue/{id}")  // возвращаемое значение должно быть преобразовано в сообщение, если необходимо, и отправлено в указанное место назначения.
+	public void sendNotification(@Payload String message,
 								   @RequestParam String userId) {
 		String email = loginServerService.getEmailById(Long.parseLong(userId));
-		SimpMessageTemplate messageTemplate;
-		return message;
+		messagingTemplate.convertAndSendToUser(
+				email, "/secured/user/queue/specific-user", message);
 	}
 
 	/**
 	 * @MessageExceptionHandler : передать любые исключения, вызванные STOMP,
-	 * конечному пользователю в пункте назначения / queue / errors.
+	 * конечному пользователю в пункте назначения «/queue/errors».
 	 * @param exception исключение
 	 * @return отправляет String сообщение исключения
 	 */
 	@MessageExceptionHandler
-	@SendToUser("/topic/errors")
+	@SendToUser("/queue/errors")
 	public String handleException(Throwable exception) {
 		return exception.getMessage();
 	}

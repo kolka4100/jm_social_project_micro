@@ -17,13 +17,15 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @ToString
 @Log4j2
-public class NotificationMessage implements Message<String> {
+public class UserNotification implements Message<String> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private Long id;
 
 	private String payload;
+	private MessageHeaders headers = null;  // TODO
+	private String to;
 
 	@Override
 	public MessageHeaders getHeaders() {  // TODO

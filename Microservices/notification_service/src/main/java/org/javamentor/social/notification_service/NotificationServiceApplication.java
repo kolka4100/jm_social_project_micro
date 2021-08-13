@@ -9,7 +9,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableEurekaClient
+//@EnableEurekaClient
 @EnableFeignClients
 public class NotificationServiceApplication {
 
