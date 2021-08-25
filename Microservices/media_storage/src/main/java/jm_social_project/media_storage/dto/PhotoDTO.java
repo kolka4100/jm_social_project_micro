@@ -2,11 +2,21 @@ package jm_social_project.media_storage.dto;
 
 import jm_social_project.media_storage.model.PhotoContent;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Set;
 
 public class PhotoDTO {
+
+
+    @NotNull
     private Long photoId;
+
+    @NotNull
+    @Positive
     private Integer likes;
+
+    @NotNull
     private Set<String> likedUserIds;
 
     public PhotoDTO(PhotoContent photo, Integer likes) {
