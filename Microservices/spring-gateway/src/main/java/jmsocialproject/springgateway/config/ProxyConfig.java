@@ -8,6 +8,8 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Date;
+
 @Configuration
 public class ProxyConfig {
 
@@ -23,7 +25,9 @@ public class ProxyConfig {
                 .route(loginServiceName,
                         route -> route.path("/api/rest/auth/**")
                                 .filters(f -> f
-                                        .filter(gatewayFilter))
+                                        .filter(gatewayFilter)
+                                        .addResponseHeader("last-visited-date", new Date().toString())
+                                )
                                 .uri("lb://" + loginServiceName))
                 .build();
     }

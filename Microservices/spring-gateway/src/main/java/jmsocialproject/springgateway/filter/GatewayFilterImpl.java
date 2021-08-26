@@ -64,9 +64,16 @@ public class GatewayFilterImpl implements GatewayFilter {
 
     }
 
-    public Mono getFilterFallback()
+//    public Mono getFilterFallback()
+//    {
+//        return Mono.just("Gateway service is down!");
+//    }
+
+    public Mono<Void> getFilterFallback(ServerWebExchange exchange, GatewayFilterChain chain)
     {
-        return Mono.just("Gateway service is down!");
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(UNAUTHORIZED);
+        return response.setComplete();
     }
 
     private boolean validateToken(String jwtToken) {
