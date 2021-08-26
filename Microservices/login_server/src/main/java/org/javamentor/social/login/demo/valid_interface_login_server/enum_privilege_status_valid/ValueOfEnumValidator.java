@@ -1,4 +1,4 @@
-package org.javamentor.social.email_service.valid_interface;
+package org.javamentor.social.login.demo.valid_interface_login_server.enum_privilege_status_valid;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

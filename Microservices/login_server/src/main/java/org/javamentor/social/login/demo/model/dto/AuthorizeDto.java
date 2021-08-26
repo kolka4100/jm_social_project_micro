@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.javamentor.social.login.demo.model.Account;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -12,9 +14,9 @@ import javax.validation.constraints.Past;
 @Data
 public class AuthorizeDto {
 
-    @NotNull(message = "Токен не может быть пустым!")
+    @NotBlank(message = "Отсутствует токен!")
     private String jwtToken;
 
-    @NotEmpty
+    @NotEmpty(message = "Не найден пользователь!")
     private Account account;
 }

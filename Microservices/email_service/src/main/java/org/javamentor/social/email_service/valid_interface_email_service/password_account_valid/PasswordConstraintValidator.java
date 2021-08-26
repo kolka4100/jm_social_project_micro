@@ -1,4 +1,4 @@
-package org.javamentor.social.email_service.valid_interface;
+package org.javamentor.social.email_service.valid_interface_email_service.password_account_valid;
 
 import org.passay.*;
 
