@@ -2,11 +2,24 @@ package jm_social_project.media_storage.dto;
 
 import jm_social_project.media_storage.model.PhotoContent;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Set;
 
-public class PhotoDTO {
+public class  PhotoDTO {
+
+
+    @NotNull
+    @Min(value = 1)
     private Long photoId;
+
+    @NotNull
+    @Positive(message = "Количество лайков не может быть отрицательным!")
     private Integer likes;
+
+    @NotNull
     private Set<String> likedUserIds;
 
     public PhotoDTO(PhotoContent photo, Integer likes) {
