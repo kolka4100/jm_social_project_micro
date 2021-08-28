@@ -6,6 +6,8 @@ import org.javamentor.social.login.demo.model.request.AuthRequest;
 import org.javamentor.social.login.demo.service.AccountService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/rest/auth")
@@ -21,7 +23,9 @@ public class AuthController implements Client{
     @PostMapping("/login")
     @ApiOperation(value = "Authenticate users",
             notes = "Provide an email and password for authentication")
-    public AuthorizeDto auth(@RequestBody AuthRequest request) {
+    public AuthorizeDto auth(@RequestBody AuthRequest request,
+                             @RequestHeader Map<String, String> headers) {
+        accountService.setLastVisitedDate(request, headers);
         return accountService.getAuthorizeDto(request);
     }
 

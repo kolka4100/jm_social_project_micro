@@ -13,8 +13,10 @@ import org.javamentor.social.login.demo.service.AccountService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -90,5 +92,15 @@ public class AccountServiceImpl implements AccountService {
     public String getStatusById(Long userId) {
         AccountDTO accountDTO = accountDao.findAccountDtoById(userId);
         return accountDTO.getStatus().name();
+    }
+
+    public void setLastVisitedDate(AuthRequest request, Map<String, String> headers) {
+        Account account = findByEmailAndPassword(request.getEmail(), request.getPassword());
+        try {
+            account.setLastVisitedDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(headers.get("last-visited-date")));
+            save(account);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }

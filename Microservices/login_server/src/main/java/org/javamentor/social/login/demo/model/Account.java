@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,6 +36,8 @@ public class Account implements UserDetails {
     @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
+
+    private Date lastVisitedDate;
 
     public Account(@NonNull String email,
                    @NonNull String password) {

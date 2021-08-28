@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR;
@@ -58,6 +59,12 @@ public class GatewayFilterImpl implements GatewayFilter {
             response.setStatusCode(UNAUTHORIZED);
             return response.setComplete();
         }
+
+        exchange.getRequest()
+                .mutate()
+                .header("last-visited-date",
+                        new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()))
+                .build();
 
         return chain.filter(exchange);
 
