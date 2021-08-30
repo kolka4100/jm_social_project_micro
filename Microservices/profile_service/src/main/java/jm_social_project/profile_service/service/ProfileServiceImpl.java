@@ -1,15 +1,15 @@
 package jm_social_project.profile_service.service;
 
 import jm_social_project.profile_service.model.Profile;
+import jm_social_project.profile_service.model.VisitedProfiles;
 import jm_social_project.profile_service.repository.ProfileRepository;
+import jm_social_project.profile_service.repository.VisitedProfileRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +17,9 @@ public class ProfileServiceImpl implements ProfileService {
 
     @NonNull
     private ProfileRepository profileRepository;
+
+    @NonNull
+    private VisitedProfileRepository visitedProfileRepository;
 
     private Profile profile;
 
@@ -27,8 +30,27 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Profile getProfileByAccountId(String accountId) {
-        return profileRepository.getProfileByAccountId(accountId);
+    public Profile getProfileByAccountId(String accountId, String user_id) {
+        Profile profile = profileRepository.getProfileByAccountId(accountId);
+        Set<VisitedProfiles> oldVisitors = profile.getVisitedProfilesSet();
+        for(VisitedProfiles visitor : oldVisitors) {
+            if(visitor.getProfileId().equals(user_id)) {
+                visitor.setVisitDate(new Date());
+                profileRepository.save(profile);
+                return profile;
+            }
+        }
+        VisitedProfiles newVisitor = new VisitedProfiles(user_id, new Date());
+        visitedProfileRepository.insert(newVisitor);
+        profile.getVisitedProfilesSet().add(newVisitor);
+
+        if(profile.getVisitedProfilesSet().size() > 10) {
+            profile.getVisitedProfilesSet().stream().limit(1).forEach(x-> visitedProfileRepository.deleteById(x.getId()));
+            profile.setVisitedProfilesSet(profile.getVisitedProfilesSet().stream().skip(1).collect(Collectors.toSet()));
+        }
+
+        profileRepository.save(profile);
+        return profile;
     }
 
     @Override

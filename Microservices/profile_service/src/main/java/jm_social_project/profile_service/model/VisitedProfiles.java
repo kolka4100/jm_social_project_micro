@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.Objects;
 
 @NoArgsConstructor
 @Data
@@ -15,11 +16,17 @@ public class VisitedProfiles {
     @Id
     private String id;
 
-    private Profile profileId;
+    private String profileId;
 
     private Date visitDate;
 
-    public VisitedProfiles(Profile profileId, Date visitDate) {
+    public VisitedProfiles(String id, String profileId, Date visitDate) {
+        this.id = id;
+        this.profileId = profileId;
+        this.visitDate = visitDate;
+    }
+
+    public VisitedProfiles(String profileId, Date visitDate) {
         this.profileId = profileId;
         this.visitDate = visitDate;
     }
