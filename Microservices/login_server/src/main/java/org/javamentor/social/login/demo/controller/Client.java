@@ -6,10 +6,12 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Map;
+
 public interface Client {
 
     @PostMapping("/login")
-    AuthorizeDto auth(AuthRequest request);
+    AuthorizeDto auth(AuthRequest request, Map<String, String> headers);
 
     @PostMapping("/registration")
     void register(@RequestBody AuthRequest request);

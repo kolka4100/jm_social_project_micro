@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR;
@@ -59,14 +60,27 @@ public class GatewayFilterImpl implements GatewayFilter {
             return response.setComplete();
         }
 
+        exchange.getRequest()
+                .mutate()
+                .header("last-visited-date",
+                        new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()))
+                .build();
+
         return chain.filter(exchange);
 
 
     }
 
-    public Mono getFilterFallback()
+//    public Mono getFilterFallback()
+//    {
+//        return Mono.just("Gateway service is down!");
+//    }
+
+    public Mono<Void> getFilterFallback(ServerWebExchange exchange, GatewayFilterChain chain)
     {
-        return Mono.just("Gateway service is down!");
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(UNAUTHORIZED);
+        return response.setComplete();
     }
 
     private boolean validateToken(String jwtToken) {
