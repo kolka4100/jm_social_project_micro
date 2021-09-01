@@ -5,9 +5,11 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.Set;
 
 
 @NoArgsConstructor
@@ -15,7 +17,7 @@ import java.util.Date;
 @Document(collection = "profile")
 public class Profile {
 
-    public Profile(String id, String accountId, String firstName, String lastName, String status, String avatarUrl, Date birthDate, String description, Double latitude, Double longitude) {
+    public Profile(String id, String accountId, String firstName, String lastName, String status, String avatarUrl, Date birthDate, String description, Double latitude, Double longitude, Set<VisitedProfiles> visitedProfilesSet) {
         this.id = id;
         this.accountId = accountId;
         this.firstName = firstName;
@@ -26,6 +28,7 @@ public class Profile {
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.visitedProfilesSet = visitedProfilesSet;
     }
 
     @Id
@@ -50,5 +53,7 @@ public class Profile {
 
     private Double longitude;
 
+    @DBRef
+    private Set<VisitedProfiles> visitedProfilesSet;
 }
 

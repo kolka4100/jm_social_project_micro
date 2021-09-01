@@ -17,7 +17,7 @@ public interface ProfileService {
 
     Profile getProfileById(String id);
 
-    Profile getProfileByAccountId(String accountId);
+    Profile getProfileByAccountId(String accountId, String user_id);
 
     Map getNearbyProfiles(Profile profile);
 
