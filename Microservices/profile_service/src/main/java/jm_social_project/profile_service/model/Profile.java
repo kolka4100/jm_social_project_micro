@@ -2,13 +2,12 @@ package jm_social_project.profile_service.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -28,8 +27,8 @@ public class Profile {
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.dodgeList = new HashMap<>();
-        this.likeList = new HashMap<>();
+        this.dodgeList = new LinkedHashMap<>();
+        this.likeList = new LinkedHashMap<>();
     }
 
     @Id

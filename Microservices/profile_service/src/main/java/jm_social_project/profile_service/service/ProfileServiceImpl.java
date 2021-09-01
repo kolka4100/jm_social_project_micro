@@ -109,6 +109,10 @@ public class ProfileServiceImpl implements ProfileService {
         if (isLiked) {
             profile.getLikeList().put(id, date);
         } else {
+            if (profile.getDodgeList().size() >= 70) {
+                String first = profile.getDodgeList().keySet().iterator().next();
+                profile.getDodgeList().remove(first);
+            }
             profile.getDodgeList().put(id, date);
         }
         profileRepository.save(profile);
