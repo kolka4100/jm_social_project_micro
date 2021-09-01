@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @NoArgsConstructor
@@ -26,6 +28,8 @@ public class Profile {
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.dodgeList = new HashMap<>();
+        this.likeList = new HashMap<>();
     }
 
     @Id
@@ -50,5 +54,8 @@ public class Profile {
 
     private Double longitude;
 
+    private Map<String, Date> dodgeList;
+
+    private Map<String, Date> likeList;
 }
 

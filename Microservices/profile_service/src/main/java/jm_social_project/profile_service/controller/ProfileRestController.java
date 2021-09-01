@@ -5,7 +5,6 @@ import jm_social_project.profile_service.model.Profile;
 import jm_social_project.profile_service.service.ProfileService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,5 +53,11 @@ public class ProfileRestController {
     public ResponseEntity<Map> getNearbyProfiles(@RequestBody Profile profile) {
 
         return ResponseEntity.ok().body(profileService.getNearbyProfiles(profile));
+    }
+
+    @GetMapping("/{id}/{isLiked}")
+    public ResponseEntity<Profile> likeOrDodgeProfile(
+            @RequestHeader("user_id") String user_id,@PathVariable String id, @PathVariable Boolean isLiked) {
+        return ResponseEntity.ok().body(profileService.likeOrDodgeProfile(user_id, id, isLiked));
     }
 }

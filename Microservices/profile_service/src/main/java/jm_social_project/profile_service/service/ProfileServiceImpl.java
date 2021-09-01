@@ -6,10 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -103,5 +100,18 @@ public class ProfileServiceImpl implements ProfileService {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         return (int) (Math.round(6371000 * c));
+    }
+
+    @Override
+    public Profile likeOrDodgeProfile(String user_id, String id, Boolean isLiked) {
+        Profile profile = getProfileById(user_id);
+        Date date = new Date();
+        if (isLiked) {
+            profile.getLikeList().put(id, date);
+        } else {
+            profile.getDodgeList().put(id, date);
+        }
+        profileRepository.save(profile);
+        return profile;
     }
 }
