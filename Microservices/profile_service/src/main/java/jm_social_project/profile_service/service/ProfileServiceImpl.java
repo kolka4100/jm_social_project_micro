@@ -43,12 +43,7 @@ public class ProfileServiceImpl implements ProfileService {
         VisitedProfiles newVisitor = new VisitedProfiles(user_id, new Date());
         visitedProfileRepository.insert(newVisitor);
         profile.getVisitedProfilesSet().add(newVisitor);
-
-        if(profile.getVisitedProfilesSet().size() > 10) {
-            profile.getVisitedProfilesSet().stream().limit(1).forEach(x-> visitedProfileRepository.deleteById(x.getId()));
-            profile.setVisitedProfilesSet(profile.getVisitedProfilesSet().stream().skip(1).collect(Collectors.toSet()));
-        }
-
+        limitVisitedProfiles(profile);
         profileRepository.save(profile);
         return profile;
     }
@@ -125,5 +120,12 @@ public class ProfileServiceImpl implements ProfileService {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         return (int) (Math.round(6371000 * c));
+    }
+
+    private void limitVisitedProfiles(Profile profile) {
+        if(profile.getVisitedProfilesSet().size() > 10) {
+            profile.getVisitedProfilesSet().stream().limit(1).forEach(x-> visitedProfileRepository.deleteById(x.getId()));
+            profile.setVisitedProfilesSet(profile.getVisitedProfilesSet().stream().skip(1).collect(Collectors.toSet()));
+        }
     }
 }
