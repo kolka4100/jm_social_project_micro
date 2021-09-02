@@ -1,7 +1,9 @@
 package jm_social_project.profile_service;
 
 import jm_social_project.profile_service.model.Profile;
+import jm_social_project.profile_service.model.VisitedProfiles;
 import jm_social_project.profile_service.repository.ProfileRepository;
+import jm_social_project.profile_service.repository.VisitedProfileRepository;
 import jm_social_project.profile_service.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -10,12 +12,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @SpringBootApplication
 public class ProfileServiceApplication implements CommandLineRunner {
 
 	@Autowired
 	private ProfileRepository repository;
+
+	@Autowired
+	private VisitedProfileRepository visitedProfileRepository;
 
 	@Autowired
 	private ProfileService service;
@@ -28,15 +35,22 @@ public class ProfileServiceApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 		repository.deleteAll();
+		visitedProfileRepository.deleteAll();
+
+		//visitors
+		Set<VisitedProfiles> visitedProfilesSet = new LinkedHashSet<>();
+		visitedProfilesSet.add(new VisitedProfiles("1","2",new Date()));
+		visitedProfilesSet.add(new VisitedProfiles("2","4",new Date()));
+		visitedProfileRepository.saveAll(visitedProfilesSet);
 
 		// save a couple of customers
-		repository.save(new Profile("1", "1", "Adam", "Smith", "free", "https://", new Date(89, 2, 21), "cool boy", 45.032689,38.984449));
-		repository.save(new Profile("2", "2", "Adam1", "Smith1", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032650,38.984756));
-		repository.save(new Profile("3", "3", "Adam2", "Smith2", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032802,38.983685));
-		repository.save(new Profile("4", "4", "Adam3", "Smith3", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032096,38.984231));
-		repository.save(new Profile("5", "5", "Adam4", "Smith4", "free", "https://", new Date(89, 2, 21),"cool boy", 45.033674,38.984821));
-		repository.save(new Profile("6", "6", "Adam5", "Smith5", "free", "https://", new Date(89, 2, 21),"cool boy", 45.085804,39.040221));
-		repository.save(new Profile("7", "7", "Adam6", "Smith6", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032127,39.086379));
+		repository.save(new Profile("1", "1", "Adam", "Smith", "free", "https://", new Date(89, 2, 21), "cool boy", 45.032689,38.984449,new LinkedHashSet<VisitedProfiles>()));
+		repository.save(new Profile("2", "2", "Adam1", "Smith1", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032650,38.984756,new LinkedHashSet<VisitedProfiles>()));
+		repository.save(new Profile("3", "3", "Adam2", "Smith2", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032802,38.983685,new LinkedHashSet<VisitedProfiles>()));
+		repository.save(new Profile("4", "4", "Adam3", "Smith3", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032096,38.984231,new LinkedHashSet<VisitedProfiles>()));
+		repository.save(new Profile("5", "5", "Adam4", "Smith4", "free", "https://", new Date(89, 2, 21),"cool boy", 45.033674,38.984821,new LinkedHashSet<VisitedProfiles>()));
+		repository.save(new Profile("6", "6", "Adam5", "Smith5", "free", "https://", new Date(89, 2, 21),"cool boy", 45.085804,39.040221,new LinkedHashSet<VisitedProfiles>()));
+		repository.save(new Profile("7", "7", "Adam6", "Smith6", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032127,39.086379,visitedProfilesSet));
 
 		// вывод всех юзеров в консоль
 		System.out.println("Profiles found with findAll():");
@@ -49,13 +63,13 @@ public class ProfileServiceApplication implements CommandLineRunner {
 		// вывод юзеров в радиусе 1000 метров
 		System.out.println("Profiles in 1000m range:");
 		System.out.println("--------------------------------");
-		System.out.println(service.getNearbyProfiles(new Profile("1", "1", "Adam", "Smith", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032680,38.984446)).toString());
+		System.out.println(service.getNearbyProfiles(new Profile("1", "1", "Adam", "Smith", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032680,38.984446,new LinkedHashSet<VisitedProfiles>())).toString());
 		System.out.println();
 
 		// вывод расстояний от меня до юзеров
 		System.out.println("profile distance between you and others:");
 		System.out.println("--------------------------------");
-		System.out.println(service.distanceBetweenProfiles(new Profile("1", "1", "Adam", "Smith", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032680,38.984446)).toString());
+		System.out.println(service.distanceBetweenProfiles(new Profile("1", "1", "Adam", "Smith", "free", "https://", new Date(89, 2, 21),"cool boy", 45.032680,38.984446,new LinkedHashSet<VisitedProfiles>())).toString());
 		System.out.println();
 	}
 }

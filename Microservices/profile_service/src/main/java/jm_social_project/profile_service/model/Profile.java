@@ -4,11 +4,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 @NoArgsConstructor
@@ -16,7 +18,7 @@ import java.util.Map;
 @Document(collection = "profile")
 public class Profile {
 
-    public Profile(String id, String accountId, String firstName, String lastName, String status, String avatarUrl, Date birthDate, String description, Double latitude, Double longitude) {
+    public Profile(String id, String accountId, String firstName, String lastName, String status, String avatarUrl, Date birthDate, String description, Double latitude, Double longitude, Set<VisitedProfiles> visitedProfilesSet) {
         this.id = id;
         this.accountId = accountId;
         this.firstName = firstName;
@@ -29,6 +31,7 @@ public class Profile {
         this.longitude = longitude;
         this.dodgeList = new LinkedHashMap<>();
         this.likeList = new LinkedHashMap<>();
+        this.visitedProfilesSet = visitedProfilesSet;
     }
 
     @Id
@@ -56,5 +59,7 @@ public class Profile {
     private Map<String, Date> dodgeList;
 
     private Map<String, Date> likeList;
+    @DBRef
+    private Set<VisitedProfiles> visitedProfilesSet;
 }
 

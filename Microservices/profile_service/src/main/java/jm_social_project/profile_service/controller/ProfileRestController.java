@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -25,8 +26,8 @@ public class ProfileRestController {
     }
 
     @GetMapping("/{accountId}")
-    public ResponseEntity<Profile> getProfileByAccountId(@PathVariable String accountId) {
-        return ResponseEntity.ok().body(profileService.getProfileByAccountId(accountId));
+    public ResponseEntity<Profile> getProfileByAccountId(@RequestHeader("user_id") String user_id, @PathVariable String accountId) {
+        return ResponseEntity.ok().body(profileService.getProfileByAccountId(accountId,user_id));
     }
 
     @PutMapping
@@ -39,10 +40,11 @@ public class ProfileRestController {
         return ResponseEntity.ok().body(profileService.getAllProfiles());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Profile> getProfile(@PathVariable String id) {
-        return ResponseEntity.ok().body(profileService.getProfileById(id));
-    }
+    // маппинг дублируется с accountId
+    //@GetMapping("/{id}")
+    //public ResponseEntity<Profile> getProfile(@PathVariable String id) {
+    //    return ResponseEntity.ok().body(profileService.getProfileById(id));
+    //}
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteProfile(@PathVariable String id) {

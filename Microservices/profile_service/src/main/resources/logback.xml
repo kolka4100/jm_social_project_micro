@@ -25,8 +25,11 @@
             <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} [%thread] [%-5level] [%logger:%line] - %msg%n</pattern>
         </encoder>
     </appender>
-
-    <root level="debug">
+    <root level="error">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+    <root level="info">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </root>
