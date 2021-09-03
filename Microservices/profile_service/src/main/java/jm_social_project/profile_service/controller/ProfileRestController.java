@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -58,8 +57,8 @@ public class ProfileRestController {
     }
 
     @GetMapping("/{id}/{isLiked}")
-    public ResponseEntity<Profile> likeOrDodgeProfile(
+    public ResponseEntity<Profile> addToLikeOrDodgeList(
             @RequestHeader("user_id") String user_id,@PathVariable String id, @PathVariable Boolean isLiked) {
-        return ResponseEntity.ok().body(profileService.likeOrDodgeProfile(user_id, id, isLiked));
+        return ResponseEntity.ok().body(profileService.addToLikeOrDodgeList(user_id, id, isLiked));
     }
 }

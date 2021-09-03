@@ -123,7 +123,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Profile likeOrDodgeProfile(String user_id, String id, Boolean isLiked) {
+    public Profile addToLikeOrDodgeList(String user_id, String id, Boolean isLiked) {
         Profile profile = getProfileById(user_id);
         Date date = new Date();
         if (isLiked) {
