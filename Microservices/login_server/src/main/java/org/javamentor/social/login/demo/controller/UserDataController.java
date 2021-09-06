@@ -5,12 +5,14 @@ import io.swagger.annotations.ApiParam;
 import org.javamentor.social.login.demo.aspects.CheckAccount;
 import org.javamentor.social.login.demo.exceptions.NoSuchUserException;
 import org.javamentor.social.login.demo.model.Account;
-import org.javamentor.social.login.demo.model.dto.TestDto;
+import org.javamentor.social.login.demo.model.request.TestDto;
 import org.javamentor.social.login.demo.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
 
@@ -18,8 +20,12 @@ import javax.validation.Valid;
 @RequestMapping("/api/rest/data")
 public class UserDataController {
 
+    @Resource
+    TestDto testDto;
+
     private final AccountService accountService;
 
+    @Autowired
     public UserDataController(AccountService accountService) {
         this.accountService = accountService;
     }
@@ -46,22 +52,11 @@ public class UserDataController {
     }
 
 
-    /*
-    Тестовый метод для проверки аннотации! Нужно удалить!
-    */
-    @CheckAccount
-    @PostMapping("/account/test")
-    public ResponseEntity<Account> getAccount(@Valid @RequestBody Account account) {
-        return new ResponseEntity<>(accountService.findById(account.getId()), HttpStatus.OK);
+    @PostMapping("/status/test")
+    @CheckAccount(object = Account.class)
+    public ResponseEntity<Account> testAccount(@RequestBody TestDto testDto) {
+        Long a = testDto.getId();    //пытался вызвать aspect через вызов getId() С вложенным методом лажа полная.
+        return new ResponseEntity<>(accountService.findById(a), HttpStatus.OK);
     }
 
-
-    /*
-    Тестовый метод для проверки аннотации! Нужно удалить!
-     */
-    @CheckAccount
-    @PostMapping("/account/test1")
-    public ResponseEntity<String> getAccount1(@Valid @RequestBody TestDto testDto) {
-        return new ResponseEntity<>(testDto.toString(), HttpStatus.OK);
-    }
 }
