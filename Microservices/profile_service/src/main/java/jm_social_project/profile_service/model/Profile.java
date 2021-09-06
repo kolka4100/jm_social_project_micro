@@ -2,13 +2,14 @@ package jm_social_project.profile_service.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -28,6 +29,8 @@ public class Profile {
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.dodgeList = new LinkedHashMap<>();
+        this.likeList = new LinkedHashMap<>();
         this.visitedProfilesSet = visitedProfilesSet;
     }
 
@@ -53,6 +56,9 @@ public class Profile {
 
     private Double longitude;
 
+    private Map<String, Date> dodgeList;
+
+    private Map<String, Date> likeList;
     @DBRef
     private Set<VisitedProfiles> visitedProfilesSet;
 }

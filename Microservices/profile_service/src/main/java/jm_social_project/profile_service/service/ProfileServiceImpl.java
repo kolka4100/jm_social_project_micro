@@ -122,6 +122,23 @@ public class ProfileServiceImpl implements ProfileService {
         return (int) (Math.round(6371000 * c));
     }
 
+    @Override
+    public Profile addToLikeOrDodgeList(String user_id, String id, Boolean isLiked) {
+        Profile profile = getProfileById(user_id);
+        Date date = new Date();
+        if (isLiked) {
+            profile.getLikeList().put(id, date);
+        } else {
+            if (profile.getDodgeList().size() >= 70) {
+                String first = profile.getDodgeList().keySet().iterator().next();
+                profile.getDodgeList().remove(first);
+            }
+            profile.getDodgeList().put(id, date);
+        }
+        profileRepository.save(profile);
+        return profile;
+    }
+
     private void limitVisitedProfiles(Profile profile) {
         if(profile.getVisitedProfilesSet().size() > 10) {
             profile.getVisitedProfilesSet().stream().limit(1).forEach(x-> visitedProfileRepository.deleteById(x.getId()));

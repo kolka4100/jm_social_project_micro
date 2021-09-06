@@ -23,4 +23,5 @@ public interface ProfileService {
 
     List distanceBetweenProfiles(Profile profile);
 
+    Profile addToLikeOrDodgeList(String user_id, String id, Boolean isLiked);
 }
