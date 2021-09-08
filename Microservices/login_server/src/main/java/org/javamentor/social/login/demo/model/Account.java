@@ -1,7 +1,6 @@
 package org.javamentor.social.login.demo.model;
 
 import lombok.*;
-import org.javamentor.social.login.demo.aspects.CheckAccount;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,6 +13,7 @@ import java.util.Collections;
 @Getter
 @Setter
 @Entity
+@ToString
 @Table(name = "account", schema = "public")
 public class Account implements UserDetails {
 
@@ -39,12 +39,6 @@ public class Account implements UserDetails {
 
     public Account(@NonNull String email,
                    @NonNull String password) {
-        this.email = email;
-        this.password = password;
-    }
-
-    public Account(@NonNull Long id, @NonNull String email, @NonNull String password) {
-        this.id = id;
         this.email = email;
         this.password = password;
     }
