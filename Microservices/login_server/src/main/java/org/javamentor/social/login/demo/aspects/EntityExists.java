@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
 
 @Component
 @Aspect
-public class AccountExists {
+public class EntityExists {
 
     @PersistenceContext
     private EntityManager entityManager;
