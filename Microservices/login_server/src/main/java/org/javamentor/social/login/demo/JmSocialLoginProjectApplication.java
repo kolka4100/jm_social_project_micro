@@ -20,5 +20,4 @@ public class JmSocialLoginProjectApplication {
 	public DataInit dataInit() {
 		return new DataInit();
 	}
-
 }

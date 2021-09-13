@@ -4,18 +4,22 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.javamentor.social.login.demo.exceptions.NoSuchUserException;
 import org.javamentor.social.login.demo.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/api/rest/data")
-public class UserDataController{
+public class UserDataController {
+
 
     private final AccountService accountService;
 
+    @Autowired
     public UserDataController(AccountService accountService) {
         this.accountService = accountService;
     }
+
 
     @PostMapping("/email")
     @ApiOperation(value = "Find email by userId",
@@ -29,6 +33,7 @@ public class UserDataController{
             throw new NoSuchUserException("No account with id " + userId);
         }
     }
+
 
     @GetMapping("/status/{userId}")
     @ApiOperation(value = "Find Status by userId",

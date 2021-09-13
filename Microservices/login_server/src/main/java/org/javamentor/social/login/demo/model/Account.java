@@ -14,6 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@ToString
 @Table(name = "account", schema = "public")
 public class Account implements UserDetails {
 
