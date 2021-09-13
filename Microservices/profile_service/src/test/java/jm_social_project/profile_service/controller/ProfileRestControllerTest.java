@@ -47,6 +47,15 @@ public class ProfileRestControllerTest {
     }
 
     @Test
+    void getAllProfiles() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = get("/profiles").header("user_id", "1");
+        this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("getAllProfiles"));
+    }
+
+    @Test
     void getProfileByAccountId() throws Exception {
         MockHttpServletRequestBuilder requestBuilder = get("/profiles/2").header("user_id", "1");
         this.mockMvc
@@ -55,4 +64,5 @@ public class ProfileRestControllerTest {
                 .andExpect(status().isOk())
                 .andDo(document("getProfileByAccountId"));
     }
+
 }
