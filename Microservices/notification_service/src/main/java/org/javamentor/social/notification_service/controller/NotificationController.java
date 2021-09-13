@@ -1,61 +1,52 @@
 package org.javamentor.social.notification_service.controller;
 
-import lombok.*;
-import org.javamentor.social.notification_service.service.LoginServerService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.javamentor.social.notification_service.exception.ErrorReqWebSocket;
+import org.javamentor.social.notification_service.model.MessageDto;
+import org.javamentor.social.notification_service.postForUser.Post;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
-import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
-import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
+import org.springframework.stereotype.Controller;
 
-@RestController
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+@Controller
 @AllArgsConstructor
-@Setter
-@Getter
-@ToString
-@EqualsAndHashCode
+@Data
 public class NotificationController {
 
-	private final LoginServerService loginServerService;
-	private final SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private final SimpMessagingTemplate messagingTemplate;
 
-	/**
-	 * @Payload для извлечения полезной нагрузки сообщения и, при необходимости,
-	 * его преобразовании с помощью Spring MessageConverter.
-	 * @param message уведомление для отправки
-	 * @param userId идентификатор пользователя
-	 * @return сообщение, и отправляет в указанное в @SendTo("URL-адрес") место назначения.
-	 */
-	@PostMapping("/notification/")  // отображение сообщения, направленного по URL-адресу / сообщению.
-//	@SendToUser("/queue/{id}")  // возвращаемое значение должно быть преобразовано в сообщение, если необходимо, и отправлено в указанное место назначения.
-	public void sendNotification(@Payload String message,
-								   @RequestParam String userId) {
-		String email = loginServerService.getEmailById(Long.parseLong(userId));
-		messagingTemplate.convertAndSendToUser(
-				email, "/secured/user/queue/specific-user", message);
-	}
+    @Autowired
+    private final Post post;
 
-	/**
-	 * @MessageExceptionHandler : передать любые исключения, вызванные STOMP,
-	 * конечному пользователю в пункте назначения «/queue/errors».
-	 * @param exception исключение
-	 * @return отправляет String сообщение исключения
-	 */
-	@MessageExceptionHandler
-	@SendToUser("/queue/errors")
-	public String handleException(Throwable exception) {
-		return exception.getMessage();
-	}
 
-//	@MessageMapping("/chat.addUser")
-//	@SendTo("/topic/public")
-//	public NotificationMessage addUser(@Payload NotificationMessage chatMessage,
-//	                           SimpMessageHeaderAccessor headerAccessor) {
-//		headerAccessor.getSessionAttributes().put("username",chatMessage.getSender());
-//		return chatMessage;
-//	}
+    @MessageMapping("/hello")
+    @SendTo("/topic/news")
+    public MessageDto messageDto(String message) throws Exception {
+        Thread.sleep(1000);
+        String newsDate = new SimpleDateFormat("yyyy/MM/dd HH:mm").format(Calendar.getInstance().getTime());
+        return new MessageDto(newsDate, message);
+    }
 
+
+    @SubscribeMapping("/user/{id}/news")
+    public String subscribeMapping(@DestinationVariable("id_user") final Integer id) {
+       return post.getUpdateList().get(id);
+    }
+
+    @MessageExceptionHandler
+    @SendToUser(value = "/exchange/errors")
+    public String handleProfanity(ErrorReqWebSocket e) {
+        return e.getMessage();
+    }
 }
