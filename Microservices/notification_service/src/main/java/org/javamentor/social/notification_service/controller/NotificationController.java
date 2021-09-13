@@ -40,8 +40,8 @@ public class NotificationController {
 
 
     @SubscribeMapping("/user/{id}/news")
-    public void subscribeMapping(@DestinationVariable("id_user") final Long id) {
-        messagingTemplate.convertAndSend("/topic/user/" + id, post.getUpdateList().get(id));
+    public String subscribeMapping(@DestinationVariable("id_user") final Integer id) {
+       return post.getUpdateList().get(id);
     }
 
     @MessageExceptionHandler
@@ -49,6 +49,4 @@ public class NotificationController {
     public String handleProfanity(ErrorReqWebSocket e) {
         return e.getMessage();
     }
-
-
 }
