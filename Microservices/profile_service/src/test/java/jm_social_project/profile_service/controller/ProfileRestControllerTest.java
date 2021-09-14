@@ -133,4 +133,25 @@ public class ProfileRestControllerTest {
                 .andExpect(status().isOk())
                 .andDo(document("deleteProfile"));
     }
+
+
+    @Test
+    void getNearbyProfiles() throws Exception {
+        Profile profile = repository.getProfileByAccountId("2");
+        String data = "";
+        try {
+            data = objectMapper.writeValueAsString(profile);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        MockHttpServletRequestBuilder requestBuilder = get("/profiles/nearby-profiles")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .header("user_id", "1")
+                .content(data);
+        this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("getNearbyProfiles"));
+    }
 }
