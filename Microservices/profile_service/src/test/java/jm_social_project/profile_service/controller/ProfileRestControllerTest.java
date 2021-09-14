@@ -154,4 +154,14 @@ public class ProfileRestControllerTest {
                 .andExpect(status().isOk())
                 .andDo(document("getNearbyProfiles"));
     }
+
+    @Test
+    void addToLikeOrDodgeList() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = get("/profiles/{accountId}/{isLiked}", 2, true)
+                .header("user_id", "1");
+        this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("addToLikeOrDodgeList"));
+    }
 }
