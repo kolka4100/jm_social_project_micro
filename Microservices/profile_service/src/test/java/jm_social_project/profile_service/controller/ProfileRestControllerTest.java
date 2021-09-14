@@ -1,5 +1,9 @@
 package jm_social_project.profile_service.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jm_social_project.profile_service.model.Profile;
+import jm_social_project.profile_service.model.VisitedProfiles;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,10 +19,14 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Date;
+import java.util.LinkedHashSet;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -65,4 +73,23 @@ public class ProfileRestControllerTest {
                 .andDo(document("getProfileByAccountId"));
     }
 
+    @Test
+    void createProfile() throws Exception {
+        Profile profile = new Profile("8", "8", "Adam8", "Smith8", "free", "https://", new Date(89, 2, 21), "cool boy", 45.032689,38.984449,new LinkedHashSet<VisitedProfiles>());
+        String data = "";
+        try {
+            data = new ObjectMapper().writeValueAsString(profile);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        MockHttpServletRequestBuilder requestBuilder = post("/profiles")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("user_id", "1")
+                .content(data);
+
+        this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("createProfile"));
+    }
 }
