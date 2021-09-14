@@ -62,7 +62,8 @@ public class ProfileRestControllerTest {
 
     @Test
     void getAllProfiles() throws Exception {
-        MockHttpServletRequestBuilder requestBuilder = get("/profiles").header("user_id", "1");
+        MockHttpServletRequestBuilder requestBuilder = get("/profiles")
+                .header("user_id", "1");
         this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -71,7 +72,8 @@ public class ProfileRestControllerTest {
 
     @Test
     void getProfileByAccountId() throws Exception {
-        MockHttpServletRequestBuilder requestBuilder = get("/profiles/2").header("user_id", "1");
+        MockHttpServletRequestBuilder requestBuilder = get("/profiles/{accountId}", 2)
+                .header("user_id", "1");
         this.mockMvc
                 .perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -84,7 +86,7 @@ public class ProfileRestControllerTest {
         Profile profile = new Profile("8", "8", "Adam8", "Smith8", "free", "https://", new Date(89, 2, 21), "cool boy", 45.032689,38.984449,new LinkedHashSet<VisitedProfiles>());
         String data = "";
         try {
-            data = new ObjectMapper().writeValueAsString(profile);
+            data = objectMapper.writeValueAsString(profile);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
