@@ -120,4 +120,15 @@ public class ProfileRestControllerTest {
                 .andExpect(status().isOk())
                 .andDo(document("updateProfile"));
     }
+
+    @Test
+    void deleteProfile() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = delete("/profiles/{id}", 2)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("user_id", "1");
+        this.mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("deleteProfile"));
+    }
 }
