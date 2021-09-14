@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jm_social_project.profile_service.model.Profile;
 import jm_social_project.profile_service.model.VisitedProfiles;
+import jm_social_project.profile_service.repository.ProfileRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,8 +26,7 @@ import java.util.LinkedHashSet;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,6 +40,12 @@ public class ProfileRestControllerTest {
 
     @Autowired
     private ProfileRestController controller;
+
+    @Autowired
+    private ProfileRepository repository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setUp(WebApplicationContext webApplicationContext,
@@ -91,5 +97,27 @@ public class ProfileRestControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("createProfile"));
+    }
+
+    @Test
+    void updateProfile() throws Exception {
+        Profile profile = repository.getProfileByAccountId("2");
+        profile.setFirstName("Adam2");
+        profile.setLastName("Smith2");
+        String data = "";
+        try {
+            data = objectMapper.writeValueAsString(profile);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        MockHttpServletRequestBuilder requestBuilder = put("/profiles")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("user_id", "1")
+                .content(data)
+                .characterEncoding("utf-8");
+        this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("updateProfile"));
     }
 }
