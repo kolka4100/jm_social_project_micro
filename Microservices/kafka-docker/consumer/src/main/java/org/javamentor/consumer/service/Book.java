@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Book {
 
-    private int id;
+    private Integer id;
     private String name;
 }
