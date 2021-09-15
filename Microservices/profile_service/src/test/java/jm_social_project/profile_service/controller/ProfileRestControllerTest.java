@@ -84,12 +84,8 @@ public class ProfileRestControllerTest {
     @Test
     void createProfile() throws Exception {
         Profile profile = new Profile("8", "8", "Adam8", "Smith8", "free", "https://", new Date(89, 2, 21), "cool boy", 45.032689,38.984449,new LinkedHashSet<VisitedProfiles>());
-        String data = "";
-        try {
-            data = objectMapper.writeValueAsString(profile);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        String data = objectMapper.writeValueAsString(profile);
+
         MockHttpServletRequestBuilder requestBuilder = post("/profiles")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("user_id", "1")
@@ -104,14 +100,10 @@ public class ProfileRestControllerTest {
     @Test
     void updateProfile() throws Exception {
         Profile profile = repository.getProfileByAccountId("2");
-        profile.setFirstName("Adam2");
-        profile.setLastName("Smith2");
-        String data = "";
-        try {
-            data = objectMapper.writeValueAsString(profile);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        profile.setFirstName("Adam20");
+        profile.setLastName("Smith20");
+        String data = objectMapper.writeValueAsString(profile);
+
         MockHttpServletRequestBuilder requestBuilder = put("/profiles")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("user_id", "1")
@@ -138,12 +130,8 @@ public class ProfileRestControllerTest {
     @Test
     void getNearbyProfiles() throws Exception {
         Profile profile = repository.getProfileByAccountId("2");
-        String data = "";
-        try {
-            data = objectMapper.writeValueAsString(profile);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        String data = objectMapper.writeValueAsString(profile);
+
         MockHttpServletRequestBuilder requestBuilder = get("/profiles/nearby-profiles")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
