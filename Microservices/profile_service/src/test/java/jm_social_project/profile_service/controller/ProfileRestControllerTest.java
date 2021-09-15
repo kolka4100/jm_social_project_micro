@@ -5,14 +5,12 @@ import jm_social_project.profile_service.model.Profile;
 import jm_social_project.profile_service.model.VisitedProfiles;
 import jm_social_project.profile_service.repository.ProfileRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
@@ -25,8 +23,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @SpringBootTest
+@AutoConfigureDataMongo
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 
@@ -46,7 +44,7 @@ public class ProfileRestControllerTest {
 
 
     @Test
-    public void contextLoads() throws Exception {
+    public void contextLoads() {
         assertThat(controller).isNotNull();
     }
 
