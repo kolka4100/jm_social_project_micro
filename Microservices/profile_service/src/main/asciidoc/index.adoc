@@ -1,0 +1,9 @@
+=== Get All Profiles
+
+==== Sample Request
+include::{snippets}/getAllProfiles/curl-request.adoc[]
+or with httpie:
+include::{snippets}/getAllProfiles/httpie-request.adoc[]
+
+==== Sample Response
+include::{snippets}/getAllProfiles/http-response.adoc[]

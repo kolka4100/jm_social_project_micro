@@ -19,6 +19,8 @@ import java.util.LinkedHashSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -57,7 +59,7 @@ public class ProfileRestControllerTest {
         this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("{methodName}"));
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
     }
 
 
@@ -70,7 +72,7 @@ public class ProfileRestControllerTest {
                 .perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("{methodName}"));
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
     }
 
 
@@ -87,7 +89,7 @@ public class ProfileRestControllerTest {
         this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("{methodName}"));
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
     }
 
 
@@ -107,7 +109,7 @@ public class ProfileRestControllerTest {
         this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("{methodName}"));
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
     }
 
 
@@ -120,7 +122,7 @@ public class ProfileRestControllerTest {
         this.mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("{methodName}"));
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
     }
 
 
@@ -138,7 +140,7 @@ public class ProfileRestControllerTest {
         this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("{methodName}"));
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
     }
 
 
@@ -150,6 +152,6 @@ public class ProfileRestControllerTest {
         this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("{methodName}"));
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
     }
 }
