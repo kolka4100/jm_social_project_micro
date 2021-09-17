@@ -97,7 +97,13 @@
 			<version>1.6.0</version>
 		</dependency>
 
-
+		<!--Зависимость для работы с сообщениями через сервис Sendgrid.com-->
+		<!-- https://mvnrepository.com/artifact/com.sendgrid/sendgrid-java -->
+		<dependency>
+			<groupId>com.sendgrid</groupId>
+			<artifactId>sendgrid-java</artifactId>
+			<version>4.7.4</version>
+		</dependency>
 
 	</dependencies>
 	<dependencyManagement>
