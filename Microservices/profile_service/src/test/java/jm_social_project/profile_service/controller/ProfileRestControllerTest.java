@@ -12,10 +12,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -23,13 +23,12 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureDataMongo
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
-
 public class ProfileRestControllerTest {
 
     @Autowired
@@ -53,43 +52,48 @@ public class ProfileRestControllerTest {
 
     @Test
     void getAllProfiles() throws Exception {
-        MockHttpServletRequestBuilder requestBuilder = get("/profiles")
-                .header("user_id", "1");
+        List<Profile> allProfiles = repository.findAll();
+        String expected = objectMapper.writeValueAsString(allProfiles);
 
-        this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
+        this.mockMvc
+                .perform(get("/profiles")
+                        .header("user_id", "1")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())))
                 .andExpect(status().isOk())
-                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
+                .andExpect(content().string(expected));
     }
 
 
     @Test
     void getProfileByAccountId() throws Exception {
-        MockHttpServletRequestBuilder requestBuilder = get("/profiles/{accountId}", 2)
-                .header("user_id", "1");
-
         this.mockMvc
-                .perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
+                .perform(get("/profiles/{accountId}", 2)
+                        .header("user_id", "1")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())))
                 .andExpect(status().isOk())
-                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
+                .andExpect(jsonPath("$.accountId").value("2"));
     }
 
 
     @Test
     void createProfile() throws Exception {
-        Profile profile = new Profile("8", "8", "Adam8", "Smith8", "free", "https://", new Date(89, 2, 21), "cool boy", 45.032689,38.984449,new LinkedHashSet<VisitedProfiles>());
-        String data = objectMapper.writeValueAsString(profile);
+        Profile newProfile = new Profile("8", "8", "Adam8", "Smith8", "free", "https://", new Date(89, 2, 21), "cool boy", 45.032689,38.984449,new LinkedHashSet<VisitedProfiles>());
+        String data = objectMapper.writeValueAsString(newProfile);
 
-        MockHttpServletRequestBuilder requestBuilder = post("/profiles")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("user_id", "1")
-                .content(data);
-
-        this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
+        this.mockMvc
+                .perform(post("/profiles")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header("user_id", "1")
+                    .content(data))
                 .andDo(print())
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())))
                 .andExpect(status().isOk())
-                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
+                .andExpect(content().string(data));
     }
 
 
@@ -100,29 +104,28 @@ public class ProfileRestControllerTest {
         profile.setLastName("Smith20");
         String data = objectMapper.writeValueAsString(profile);
 
-        MockHttpServletRequestBuilder requestBuilder = put("/profiles")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("user_id", "1")
-                .content(data)
-                .characterEncoding("utf-8");
-
-        this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
+        this.mockMvc
+                .perform(put("/profiles")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("user_id", "1")
+                        .content(data)
+                        .characterEncoding("utf-8"))
                 .andDo(print())
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())))
                 .andExpect(status().isOk())
-                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
+                .andExpect(content().string(data));
     }
 
 
     @Test
     void deleteProfile() throws Exception {
-        MockHttpServletRequestBuilder requestBuilder = delete("/profiles/{id}", 2)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("user_id", "1");
-
-        this.mockMvc.perform(requestBuilder)
+        this.mockMvc
+                .perform(delete("/profiles/{id}", 2)
+                        .header("user_id", "1"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())))
+                .andExpect(status().isOk());
     }
 
 
@@ -131,27 +134,27 @@ public class ProfileRestControllerTest {
         Profile profile = repository.getProfileByAccountId("2");
         String data = objectMapper.writeValueAsString(profile);
 
-        MockHttpServletRequestBuilder requestBuilder = get("/profiles/nearby-profiles")
-                .contentType(MediaType.APPLICATION_JSON)
-                .characterEncoding("utf-8")
-                .header("user_id", "1")
-                .content(data);
-
-        this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
+        this.mockMvc
+                .perform(get("/profiles/nearby-profiles")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .header("user_id", "1")
+                        .content(data))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())))
+                .andExpect(status().isOk());
     }
 
 
     @Test
     void addToLikeOrDodgeList() throws Exception {
-        MockHttpServletRequestBuilder requestBuilder = get("/profiles/{accountId}/{isLiked}", 2, true)
-                .header("user_id", "1");
-
-        this.mockMvc.perform(requestBuilder.accept(MediaType.APPLICATION_JSON))
+        this.mockMvc
+                .perform(get("/profiles/{accountId}/{isLiked}", 2, true)
+                        .header("user_id", "1")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("{methodName}", preprocessResponse(prettyPrint())));
+                .andDo(document("{methodName}", preprocessResponse(prettyPrint())))
+                .andExpect(status().isOk());
     }
 }
