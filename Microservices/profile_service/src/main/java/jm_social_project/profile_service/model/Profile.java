@@ -40,6 +40,8 @@ public class Profile {
     @Indexed(unique = true)
     private String accountId;
 
+    private boolean privateProfile;
+
     private String firstName;
 
     private String lastName;
